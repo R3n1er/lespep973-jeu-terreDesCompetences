@@ -21,6 +21,12 @@
 @layer base {
   html {
     color: var(--neutral-900);
-    background: var(--neutral-0);
+    background: linear-gradient(135deg, #0a6cc21a 0%, #24a1481a 50%, #ff7a001a 100%);
+  }
+
+  body {
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.1) 1px, transparent 0);
+    background-size: 16px 16px;
   }
 }

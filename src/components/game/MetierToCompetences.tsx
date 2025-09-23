@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import type { ChallengeMetierToCompetences } from "@/types/game";
 import { getJobLabel, getCompetenceLabel } from "@/data/metiers";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const MAX_SELECTION = 6;
 
@@ -32,62 +34,56 @@ export default function MetierToCompetences({ challenge, onSubmit }: Props) {
   };
 
   return (
-    <div className="max-w-4xl w-full">
-      <h3 className="text-2xl font-bold text-neutral-900 mb-4">
-        Sélectionnez 6 compétences pour {jobLabel}
-      </h3>
-      <p className="text-neutral-600 mb-4">
-        Sélection en cours: {selected.size}/{MAX_SELECTION}
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {challenge.options.map((option) => {
-          const isSelected = selected.has(option);
-          const isDisabled = !isSelected && selected.size >= MAX_SELECTION;
-          return (
-            <button
-              key={option}
-              className={`rounded-lg border px-4 py-3 text-left font-semibold transition ${
-                isSelected
-                  ? "bg-brand-primary text-white border-brand-primary"
-                  : "border-brand-primary text-brand-primary hover:bg-brand-primary/10"
-              } ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={() => toggle(option)}
-              disabled={isDisabled}
-            >
-              {getCompetenceLabel(option)}
-            </button>
-          );
-        })}
-      </div>
-
-      {selected.size > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2 text-sm text-neutral-700">
-          {Array.from(selected).map((option) => (
-            <span
-              key={option}
-              className="rounded-full bg-brand-primary/10 px-3 py-1 text-brand-primary"
-            >
-              {getCompetenceLabel(option)}
-            </span>
-          ))}
+    <Card className="w-full bg-neutral-0">
+      <CardHeader>
+        <CardTitle className="text-3xl font-extrabold text-neutral-900">
+          Sélectionnez 6 compétences pour {jobLabel}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <p className="text-neutral-600 mb-2">
+          Sélection en cours: {selected.size}/{MAX_SELECTION}
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {challenge.options.map((option) => {
+            const isSelected = selected.has(option);
+            const isDisabled = !isSelected && selected.size >= MAX_SELECTION;
+            return (
+              <Button
+                key={option}
+                variant={isSelected ? "secondary" : "outline"}
+                className="h-14 text-left text-base"
+                onClick={() => toggle(option)}
+                disabled={isDisabled}
+              >
+                {getCompetenceLabel(option)}
+              </Button>
+            );
+          })}
         </div>
-      )}
 
-      <div className="mt-6 flex flex-wrap gap-4">
-        <button
-          className="rounded-lg bg-brand-primary px-6 py-3 text-white font-semibold disabled:opacity-50"
-          disabled={selected.size !== MAX_SELECTION}
-          onClick={handleSubmit}
-        >
-          Valider
-        </button>
-        <button
-          className="rounded-lg border border-brand-primary px-6 py-3 text-brand-primary font-semibold"
-          onClick={() => setSelected(new Set())}
-        >
-          Réinitialiser
-        </button>
-      </div>
-    </div>
+        {selected.size > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2 text-sm text-neutral-700">
+            {Array.from(selected).map((option) => (
+              <span
+                key={option}
+                className="rounded-full bg-brand-primary/10 px-3 py-1 text-brand-primary"
+              >
+                {getCompetenceLabel(option)}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="flex flex-wrap gap-4 pt-4">
+          <Button size="lg" disabled={selected.size !== MAX_SELECTION} onClick={handleSubmit}>
+            Valider
+          </Button>
+          <Button variant="outline" size="lg" onClick={() => setSelected(new Set())}>
+            Réinitialiser
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

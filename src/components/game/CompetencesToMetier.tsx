@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   competences: string[];
@@ -14,41 +16,44 @@ export default function CompetencesToMetier({
   const [selected, setSelected] = useState<string>("");
 
   return (
-    <div className="max-w-4xl w-full">
-      <h3 className="text-2xl font-bold text-neutral-900 mb-4">
-        Associez les compétences au métier
-      </h3>
-      <ul className="mb-6 list-disc pl-6 text-neutral-800">
-        {competences.map((c) => (
-          <li key={c}>{c}</li>
-        ))}
-      </ul>
+    <Card className="w-full bg-neutral-0">
+      <CardHeader>
+        <CardTitle className="text-3xl font-extrabold text-neutral-900">
+          Associez les compétences au métier
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <ul className="grid gap-2 rounded-2xl border-4 border-neutral-900 bg-neutral-50 p-4 text-left text-neutral-800">
+          {competences.map((c) => (
+            <li key={c} className="text-base font-medium">
+              • {c}
+            </li>
+          ))}
+        </ul>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {options.map((o) => (
-          <button
-            key={o}
-            className={`rounded-lg border px-4 py-3 font-semibold transition ${
-              selected === o
-                ? "bg-brand-primary text-white border-brand-primary"
-                : "border-brand-primary text-brand-primary hover:bg-brand-primary/10"
-            }`}
-            onClick={() => setSelected(o)}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {options.map((o) => (
+            <Button
+              key={o}
+              variant={selected === o ? "accent" : "outline"}
+              className="h-14 text-base"
+              onClick={() => setSelected(o)}
+            >
+              {o}
+            </Button>
+          ))}
+        </div>
+
+        <div className="pt-4">
+          <Button
+            size="lg"
+            disabled={!selected}
+            onClick={() => selected && onSubmit(selected)}
           >
-            {o}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-6">
-        <button
-          className="rounded-lg bg-brand-primary px-6 py-3 text-white font-semibold disabled:opacity-50"
-          disabled={!selected}
-          onClick={() => selected && onSubmit(selected)}
-        >
-          Valider
-        </button>
-      </div>
-    </div>
+            Valider
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
