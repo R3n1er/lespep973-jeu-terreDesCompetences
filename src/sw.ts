@@ -1,10 +1,39 @@
-// Placeholder SW (Workbox pourra être ajouté ultérieurement)
-self.addEventListener("install", () => {
-  const sw = self as unknown as ServiceWorkerGlobalScope;
-  sw.skipWaiting();
-});
+import { clientsClaim } from "workbox-core";
+import { precacheAndRoute } from "workbox-precaching";
+import { registerRoute } from "workbox-routing";
+import {
+  NetworkFirst,
+  StaleWhileRevalidate,
+  CacheFirst,
+} from "workbox-strategies";
 
-self.addEventListener("activate", () => {
-  const sw = self as unknown as ServiceWorkerGlobalScope;
-  sw.clients.claim();
-});
+declare const self: ServiceWorkerGlobalScope;
+
+self.skipWaiting();
+clientsClaim();
+
+precacheAndRoute(self.__WB_MANIFEST || []);
+
+registerRoute(
+  ({ request }) => request.destination === "document",
+  new NetworkFirst({
+    cacheName: "pages",
+    networkTimeoutSeconds: 3,
+  })
+);
+
+registerRoute(
+  ({ request }) =>
+    request.destination === "style" || request.destination === "script",
+  new StaleWhileRevalidate({
+    cacheName: "static-resources",
+  })
+);
+
+registerRoute(
+  ({ request }) => request.destination === "image",
+  new CacheFirst({
+    cacheName: "images",
+    matchOptions: { ignoreSearch: true },
+  })
+);

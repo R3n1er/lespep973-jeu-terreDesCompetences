@@ -216,6 +216,8 @@ Des équipes de 15 personnes maximum se succèdent sur une tablette pendant **10
 - **React Context** - Gestion d'état globale
 - **Custom Hooks** - Logique métier réutilisable
 - **LocalStorage** - Persistance locale RGPD-compliant
+- **LocalStorage + IndexedDB** : Persistance hors-ligne et reprise de session
+- **Offline queue** : File de réponses en mode hors-ligne
 
 ## 📱 Compatibilité
 

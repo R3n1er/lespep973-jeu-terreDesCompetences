@@ -41,8 +41,8 @@ public/
   - Scripts npm: dev (port 3000 strict), build, preview (3000), test, test:watch, lint, lint:fix, type-check, pre-commit. (FAIT)
 - **PWA offline-first**
   - `manifest.webmanifest` (paysage), icônes, `theme_color`. (FAIT v1)
-  - Service Worker Workbox: pré-cache shell, runtime caching, fallback offline. (À FAIRE: placeholder SW créé)
-  - Détection `online/offline` + pastille d’état en UI. (À FAIRE)
+  - Service Worker Workbox: pré-cache shell, runtime caching, fallback offline. (FAIT v1 injectManifest)
+  - Détection `online/offline` + pastille d’état en UI. (FAIT `OfflineIndicator` + hook)
 - **Données & types**
   - Types dans `src/types/*`. (FAIT v1)
   - Générer `src/data/metiers.ts` depuis la liste docs. (FAIT v1 — à compléter)
@@ -54,19 +54,19 @@ public/
   - Sons/vibration et fallback silencieux. (En cours: audio stub)
 - **Gameplay & écrans**
   - `StartScreen`, `GameScreen`, `EndScreen`. (FAIT v1 — flux minimal)
-  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`. (En cours: type 1 fait)
-  - Boutons de validation manuelle et intermission 5s. (Partiel: validation type 1 ok)
+  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`. (FAIT v1 pour 2 défis)
+  - Boutons de validation manuelle et intermission 5s. (Partiel: feedback/transition en place)
 - **Rotation équipes**
   - `useTeamRotation` (2min30 + pause). (FAIT v1 — intégration GameScreen)
   - UI: équipe active/suivante. (FAIT v1
   - Tests unitaires rotation. (FAIT vitest)
 - **Persistance & export**
-  - `GameDataManager` (IndexedDB + localStorage), export JSON. (À FAIRE)
+  - `GameDataManager` (IndexedDB + localStorage), export JSON. (EN PROGRÈS: GameContext + queue offline)
 - **UI/Styles iPad**
   - Safe areas, cibles 44×44, marges, orientation paysage. (À FAIRE)
   - Icônes: **Lucide Icons (lucide-react)** pour une cohérence visuelle et accessibilité. (À FAIRE)
 - **Tests**
-  - Unitaires: timer, rotation, scoring, mapping données. (EN COURS ➜ timer/rotation ok)
+  - Unitaires: timer, rotation, scoring, mapping données. (EN COURS ➜ timer/rotation/scoring/défis ok)
   - Intégration: flux de jeu complet. (En cours: start→game)
   - E2E Playwright: iPad paysage, PWA offline. (À FAIRE)
 
@@ -83,12 +83,12 @@ public/
   - ✅ Rotation équipes (`useTeamRotation` + panel)
   - ✅ Écrans Start/Game/End (flux minimal)
   - ⏳ UI dédiée (intermission 5s animée, transitions Motion)
-- **J5**: Défis v1 + transitions/feedback, persistance locale. [20%]
-  - ✅ ChallengeRenderer + type 1 + validation
-  - ⏳ Type 2 + feedback + stockage réponses
+- **J5**: Défis v1 + transitions/feedback, persistance locale. [60%]
+  - ✅ ChallengeRenderer + type 1 + type 2 + feedback de base
+  - ✅ Persistance GameContext (IndexedDB + localStorage + queue offline)
 - **J6**: Finitions UI iPad, a11y, animations, export résultats. [0%]
-- **J7**: Tests unitaires/intégration/E2E, optimisations, documentation. [20%]
-  - ✅ Tests unitaires timer + rotation + défi type 1
+- **J7**: Tests unitaires/intégration/E2E, optimisations, documentation. [30%]
+  - ✅ Tests unitaires timer + rotation + scoring + défis
   - ⏳ Tests intégration (défi complet) + E2E iPad + offline
 
 ## 5) Risques & mitigations

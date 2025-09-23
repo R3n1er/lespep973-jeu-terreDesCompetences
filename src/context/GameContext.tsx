@@ -1,0 +1,164 @@
+import { useEffect, useMemo, useReducer, useRef } from "react";
+import type { ChallengeResponse, GameState } from "@/types/game";
+import { CHALLENGES_CONFIGURATION } from "@/data/challenges";
+import { TEAMS_SAMPLE } from "@/data/teams";
+import {
+  loadPersistedGameState,
+  loadResponses,
+  loadScoreFromLocalStorage,
+  persistGameState,
+  persistResponse,
+  persistScoreToLocalStorage,
+  clearStorage,
+} from "@/lib/storage";
+import { applyScore } from "@/lib/scoring";
+import { GameContext, GameContextValue } from "@/context/gameContextShared";
+import { useOfflinePersistence } from "@/context/useOfflinePersistence";
+
+const initialState: GameState = {
+  phase: "setup",
+  currentTeamIndex: 0,
+  currentChallenge: null,
+  challengeIndex: 0,
+  score: {
+    teamScores: {},
+    globalScore: 0,
+    correctAnswers: 0,
+    totalChallenges: 0,
+    streak: 0,
+  },
+  responses: [],
+};
+
+type GameAction =
+  | { type: "START_GAME" }
+  | { type: "SET_CHALLENGE"; payload: { index: number } }
+  | { type: "REGISTER_RESPONSE"; payload: ChallengeResponse }
+  | { type: "NEXT_TEAM" }
+  | { type: "END_GAME" }
+  | { type: "HYDRATE"; payload: Partial<GameState> };
+
+function gameReducer(state: GameState, action: GameAction): GameState {
+  switch (action.type) {
+    case "START_GAME":
+      return {
+        ...state,
+        phase: "playing",
+        currentChallenge: CHALLENGES_CONFIGURATION[0],
+        challengeIndex: 0,
+        currentTeamIndex: 0,
+        score: state.score.teamScores ? state.score : initialScore,
+      };
+    case "SET_CHALLENGE":
+      return {
+        ...state,
+        currentChallenge:
+          CHALLENGES_CONFIGURATION[action.payload.index] ?? null,
+        challengeIndex: action.payload.index,
+      };
+    case "REGISTER_RESPONSE":
+      return {
+        ...state,
+        responses: [...state.responses, action.payload],
+        score: applyScore(state.score, action.payload),
+        currentChallenge: null,
+      };
+    case "NEXT_TEAM":
+      return {
+        ...state,
+        currentTeamIndex: (state.currentTeamIndex + 1) % TEAMS_SAMPLE.length,
+      };
+    case "END_GAME":
+      return {
+        ...state,
+        phase: "finished",
+      };
+    case "HYDRATE":
+      return {
+        ...state,
+        ...action.payload,
+        phase: action.payload.phase ?? state.phase,
+        score: action.payload.score ?? state.score,
+        responses: action.payload.responses ?? state.responses,
+      };
+    default:
+      return state;
+  }
+}
+
+export function GameProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(gameReducer, initialState);
+  const lastResponseRef = useRef<ChallengeResponse | undefined>(undefined);
+
+  useEffect(() => {
+    (async () => {
+      const persistedState = await loadPersistedGameState();
+      const persistedResponses = await loadResponses();
+      const persistedScore = await loadScoreFromLocalStorage();
+
+      if (persistedState || persistedResponses.length || persistedScore) {
+        dispatch({
+          type: "HYDRATE",
+          payload: {
+            ...persistedState,
+            responses: persistedResponses,
+            score: persistedScore ?? initialState.score,
+          },
+        });
+        const index = persistedState?.challengeIndex ?? 0;
+        dispatch({ type: "SET_CHALLENGE", payload: { index } });
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    void persistGameState(state);
+    persistScoreToLocalStorage(state.score);
+  }, [state]);
+
+  useEffect(() => {
+    if (lastResponseRef.current) {
+      void persistResponse(lastResponseRef.current);
+      lastResponseRef.current = undefined;
+    }
+  }, [state.responses]);
+
+  useOfflinePersistence({
+    gameState: state,
+    score: state.score,
+    lastResponse: lastResponseRef.current,
+  });
+
+  const actions = useMemo(
+    () => ({
+      startGame: () => dispatch({ type: "START_GAME" }),
+      submitResponse: (response: ChallengeResponse) => {
+        lastResponseRef.current = response;
+        dispatch({ type: "REGISTER_RESPONSE", payload: response });
+      },
+      nextTeam: () => dispatch({ type: "NEXT_TEAM" }),
+      advanceChallenge: () => {
+        const nextIndex =
+          (state.challengeIndex + 1) % CHALLENGES_CONFIGURATION.length;
+        dispatch({ type: "SET_CHALLENGE", payload: { index: nextIndex } });
+      },
+      resetGame: async () => {
+        await clearStorage();
+        dispatch({ type: "END_GAME" });
+      },
+    }),
+    [state.challengeIndex]
+  );
+
+  const value: GameContextValue = useMemo(
+    () => ({
+      state,
+      challenges: CHALLENGES_CONFIGURATION,
+      teams: TEAMS_SAMPLE,
+      actions,
+    }),
+    [state, actions]
+  );
+
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+}
