@@ -16,7 +16,7 @@ Références: `README.md`, `docs/PRD.md`, `docs/ADR.md`, `docs/ReglesDuJeu.md`, 
 - **Composants de défi**: `CompetencesToMetier`, `MetierToCompetences`, `ChallengeRenderer`, `AnswerFeedback`, `ChallengeTransition` (Motion).
 - **Équipes/Rotation**: hook `useTeamRotation` (2min30 + pause 15s), intégration timer.
 - **Persistance**: `GameDataManager` (IndexedDB via `idb` + localStorage), export JSON.
-- **Tests**: Jest + Testing Library (unitaires/intégration), Playwright (E2E iPad paysage, PWA offline, UX).
+- **Tests**: Vitest + Testing Library (unitaires/intégration), Playwright (E2E iPad paysage, PWA offline, UX).
 
 ## 2) Structure de dossiers proposée
 
@@ -37,7 +37,7 @@ public/
 ## 3) Tâches d’implémentation (détail)
 
 - **Outillage & qualité**
-  - Init Vite React+TS, Tailwind v4, ESLint/Prettier, Husky, Jest/RTL, Playwright.
+  - Init Vite React+TS, Tailwind v4, ESLint/Prettier, Husky, Vitest/RTL, Playwright.
   - Scripts npm: dev, build, preview, test, test:watch, lint, lint:fix, type-check, pre-commit.
 - **PWA offline-first**
   - `manifest.webmanifest` (paysage), icônes, `theme_color`.

@@ -21,7 +21,7 @@ Dernière mise à jour: 2025-09-23
 
 #### J1–J2 — Fondations et offline minimal
 
-- [ ] Initialiser Vite React + TypeScript, ESLint/Prettier, Husky, Jest, Playwright
+- [ ] Initialiser Vite React + TypeScript, ESLint/Prettier, Husky, Vitest, Playwright
 - [ ] Configurer Tailwind v4 (tokens, styles globaux)
 - [ ] Ajouter PWA minimale: manifest (paysage), SW Workbox (shell pré-caché)
 - [ ] Types de base dans `src/types/*`
@@ -62,5 +62,3 @@ Dernière mise à jour: 2025-09-23
 ### Historique (résumé)
 
 - 2025-09-23: Création initiale de la roadmap (jalons J1→J7)
-
-

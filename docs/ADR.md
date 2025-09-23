@@ -11,6 +11,7 @@ Date: 2025-09-23
 - Le jeu doit rester fluide, accessible et exploiter des technologies modernes 2025.
 
 Références:
+
 - Guide général et présentation: `README.md`
 - Spécifications produit détaillées: `docs/PRD.md`
 - Règles affichées aux utilisateurs: `docs/ReglesDuJeu.md`
@@ -40,13 +41,18 @@ Références:
 - Alertes: thème qui vire à l’orange/rouge à 30 s, clignotement à 10 s, vibration opportuniste si supportée.
 
 Structure de données (référence PRD):
+
 ```typescript
 interface GameTimer {
   phase:
-    | "team1" | "pause1"
-    | "team2" | "pause2"
-    | "team3" | "pause3"
-    | "team4" | "finished";
+    | "team1"
+    | "pause1"
+    | "team2"
+    | "pause2"
+    | "team3"
+    | "pause3"
+    | "team4"
+    | "finished";
   timeRemaining: number; // ms
   isRunning: boolean;
   lastUpdate: number; // performance.now()
@@ -74,7 +80,7 @@ interface GameTimer {
 ### 7) Qualité, tests et déploiement
 
 - Qualité: ESLint + Prettier, Husky hooks.
-- Tests: Jest + Testing Library (unitaires/intégration) et tests E2E/UX (Playwright) avec viewport iPad paysage.
+- Tests: Vitest + Testing Library (unitaires/intégration) et tests E2E/UX (Playwright) avec viewport iPad paysage.
 - Déploiement: Vercel (build Vite), PWA activée, headers de sécurité.
 
 ## Alternatives envisagées
@@ -87,10 +93,12 @@ interface GameTimer {
 ## Conséquences
 
 Positives:
+
 - Expérience fiable sans réseau, démarrage instantané, timer précis, UX tablette soignée.
 - Maintenance facilitée (TS, composants modulaires), performances élevées (Vite).
 
 Points d’attention:
+
 - Complexité Service Worker et IndexedDB (tests nécessaires, scénarios iOS spécifiques).
 - Gestion fine du timer (Worker, persistance, reprise) à valider par tests E2E.
 
@@ -106,6 +114,4 @@ Points d’attention:
 - Générer squelettes techniques: `timer.worker.ts`, hook `useGameTimer`, écrans `StartScreen`/`EndScreen`.
 - Mettre en place Service Worker (Workbox) + manifest PWA.
 - Créer IndexedDB (schéma sessions/résultats) + export JSON.
-- Couvrir par tests Jest/Testing Library et Playwright (viewport iPad paysage).
-
-
+- Couvrir par tests Vitest/Testing Library et Playwright (viewport iPad paysage).

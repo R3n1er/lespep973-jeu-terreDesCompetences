@@ -47,7 +47,7 @@ Créer une application web interactive permettant aux équipes de découvrir les
 
 - **ESLint + Prettier** : Linting et formatage automatique
 - **Husky** : Git hooks pour la qualité du code
-- **Jest + Testing Library** : Tests unitaires et d'intégration
+- **Vitest + Testing Library** : Tests unitaires et d'intégration
 - **Storybook** : Documentation interactive des composants
 
 #### Mode hors-ligne (Offline-first)
@@ -853,8 +853,8 @@ describe("Game Flow Integration", () => {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
