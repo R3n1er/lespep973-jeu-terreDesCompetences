@@ -1,15 +1,27 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { motion, type HTMLMotionProps } from "framer-motion";
 
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div
+const MotionDiv = motion.div;
+
+interface CardProps extends HTMLMotionProps<"div"> {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>(({ className, children, ...props }, ref) => (
+  <MotionDiv
     ref={ref}
     className={cn(
       "rounded-3xl border-4 border-neutral-900 bg-neutral-0 shadow-[0_10px_0_rgba(15,23,42,0.75)] px-6 py-6",
+      "transition-transform duration-150 hover:-translate-y-1 hover:shadow-[0_16px_0_rgba(15,23,42,0.75)]",
       className
     )}
+    whileHover={{ scale: 1.02 }}
     {...props}
-  />
+  >
+    {children}
+  </MotionDiv>
 ));
 Card.displayName = "Card";
 

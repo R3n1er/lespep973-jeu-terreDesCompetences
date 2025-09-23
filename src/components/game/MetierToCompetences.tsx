@@ -3,6 +3,7 @@ import type { ChallengeMetierToCompetences } from "@/types/game";
 import { getJobLabel, getCompetenceLabel } from "@/data/metiers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 const MAX_SELECTION = 6;
 
@@ -34,7 +35,12 @@ export default function MetierToCompetences({ challenge, onSubmit }: Props) {
   };
 
   return (
-    <Card className="w-full bg-neutral-0">
+    <Card
+      className="w-full bg-neutral-0"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 250, damping: 22 }}
+    >
       <CardHeader>
         <CardTitle className="text-3xl font-extrabold text-neutral-900">
           Sélectionnez 6 compétences pour {jobLabel}
@@ -49,15 +55,16 @@ export default function MetierToCompetences({ challenge, onSubmit }: Props) {
             const isSelected = selected.has(option);
             const isDisabled = !isSelected && selected.size >= MAX_SELECTION;
             return (
-              <Button
-                key={option}
-                variant={isSelected ? "secondary" : "outline"}
-                className="h-14 text-left text-base"
-                onClick={() => toggle(option)}
-                disabled={isDisabled}
-              >
-                {getCompetenceLabel(option)}
-              </Button>
+              <motion.div key={option} whileHover={{ scale: isDisabled ? 1 : 1.03 }}>
+                <Button
+                  variant={isSelected ? "secondary" : "outline"}
+                  className="h-14 w-full text-left text-base"
+                  onClick={() => toggle(option)}
+                  disabled={isDisabled}
+                >
+                  {getCompetenceLabel(option)}
+                </Button>
+              </motion.div>
             );
           })}
         </div>
