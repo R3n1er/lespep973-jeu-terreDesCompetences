@@ -50,7 +50,7 @@ public/
 - **Timer robuste**
   - `src/workers/timer.worker.ts` (tick ~20Hz, perf.now, reprise). (FAIT v1)
   - `useGameTimer` (API: start, pause, set; alertes). (FAIT v1 avec countdownMode)
-  - `TimerDisplay` + compte à rebours audio-visuel 5s. (FAIT v1 — audio MP3 à fournir)
+  - `TimerDisplay` + compte à rebours audio-visuel 5s. (FAIT v1 — audio MP3 à fournir, animation couleur + pulsation/vibration à réaliser)
   - Sons/vibration et fallback silencieux. (En cours: audio stub)
 - **Gameplay & écrans**
   - `StartScreen`, `GameScreen`, `EndScreen`. (FAIT v1 — flux minimal)
@@ -86,6 +86,7 @@ public/
 - **J5**: Défis v1 + transitions/feedback, persistance locale. [90%]
   - ✅ ChallengeRenderer + type 1 + type 2 + feedback détaillé/stats
   - ✅ Persistance GameContext (IndexedDB + localStorage + queue offline + export JSON)
+  - ⏳ Animation timer 5s (couleurs, pulsation, vibration)
 - **J6**: Finitions UI iPad, a11y, animations, export résultats. [0%]
 - **J7**: Tests unitaires/intégration/E2E, optimisations, documentation. [30%]
   - ✅ Tests unitaires timer + rotation + scoring + défis

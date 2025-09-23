@@ -49,7 +49,7 @@ export default function CountdownOverlay({
       <audio ref={finalAudioRef} preload="auto">
         <source src="/audio/final-beep.mp3" type="audio/mpeg" />
       </audio>
-      <div className="flex h-64 w-64 items-center justify-center rounded-full border-4 border-white text-7xl font-bold text-white">
+      <div className="flex h-64 w-64 items-center justify-center rounded-full border-4 border-white text-7xl font-bold text-white animate-[pulse_0.5s_ease-in-out_infinite]">
         {seconds}
       </div>
     </div>

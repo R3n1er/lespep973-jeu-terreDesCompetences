@@ -27,6 +27,6 @@ describe("TimerDisplay", () => {
     );
 
     const badge = screen.getByText(/00:04/).closest("div");
-    expect(badge?.className).toContain("text-red-600");
+    expect(badge?.className).toContain("bg-red-500");
   });
 });
