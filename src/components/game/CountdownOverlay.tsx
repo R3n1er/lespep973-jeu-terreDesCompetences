@@ -42,14 +42,14 @@ export default function CountdownOverlay({
   const seconds = Math.max(0, Math.ceil(timeRemaining / 1000));
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-neutral-900/70">
       <audio ref={audioRef} preload="auto">
         <source src="/audio/beep.mp3" type="audio/mpeg" />
       </audio>
       <audio ref={finalAudioRef} preload="auto">
         <source src="/audio/final-beep.mp3" type="audio/mpeg" />
       </audio>
-      <div className="flex h-64 w-64 items-center justify-center rounded-full border-4 border-white text-7xl font-bold text-white animate-[pulse_0.5s_ease-in-out_infinite]">
+      <div className="flex h-64 w-64 items-center justify-center rounded-[3rem] border-8 border-neutral-900 bg-red-500 text-7xl font-black text-white shadow-[0_12px_0_rgba(24,24,27,0.8)] animate-[pulse_0.5s_ease-in-out_infinite]">
         {seconds}
       </div>
     </div>

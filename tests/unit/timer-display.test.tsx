@@ -14,7 +14,7 @@ describe("TimerDisplay", () => {
 
     expect(screen.getByText(/00:30/)).toBeInTheDocument();
     const badge = screen.getByText(/00:30/).closest("div");
-    expect(badge?.className).toContain("text-amber-600");
+    expect(badge?.className).toContain("text-amber-700");
   });
 
   it("passe en mode alerte rouge sous 5 secondes", () => {

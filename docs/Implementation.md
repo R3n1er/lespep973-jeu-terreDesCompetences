@@ -50,11 +50,11 @@ public/
 - **Timer robuste**
   - `src/workers/timer.worker.ts` (tick ~20Hz, perf.now, reprise). (FAIT v1)
   - `useGameTimer` (API: start, pause, set; alertes). (FAIT v1 avec countdownMode)
-  - `TimerDisplay` + compte à rebours audio-visuel 5s. (FAIT v1 — audio MP3 à fournir, animation couleur + pulsation/vibration à réaliser)
-  - Sons/vibration et fallback silencieux. (En cours: audio stub)
+  - `TimerDisplay` + compte à rebours audio-visuel 5s. (FAIT v1 — animations couleur/pulsation/vibration)
+  - Sons/vibration et fallback silencieux. (En pause)
 - **Gameplay & écrans**
-  - `StartScreen`, `GameScreen`, `EndScreen`. (FAIT v1 — flux minimal)
-  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`, `StatsPanel`. (FAIT v1 pour 2 défis + feedback détaillé)
+  - `StartScreen`, `GameScreen`, `EndScreen`. (FAIT v2 — shadcn/ui, style arcade)
+  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`, `StatsPanel`. (FAIT v2 avec UI arcade)
   - Boutons de validation manuelle et intermission 5s. (FAIT — feedback scoring partiel)
 - **Rotation équipes**
   - `useTeamRotation` (2min30 + pause). (FAIT v1 — intégration GameScreen)

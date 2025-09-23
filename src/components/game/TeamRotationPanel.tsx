@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@/components/ui/card";
 import type { Team } from "@/types/game";
 
 type TeamRotationPanelProps = {
@@ -11,24 +12,24 @@ export default function TeamRotationPanel({ currentTeam, nextTeam, timeRemaining
   const seconds = Math.ceil(timeRemaining / 1000);
 
   return (
-    <section className="w-full max-w-4xl rounded-2xl border border-brand-primary/20 bg-white/80 p-6 shadow-card backdrop-blur">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <Card className="w-full max-w-4xl bg-gradient-to-r from-brand-secondary/15 via-neutral-0 to-brand-primary/15">
+      <CardContent className="flex flex-wrap items-center justify-between gap-6">
         <div>
-          <p className="text-sm uppercase text-neutral-500">Équipe en cours</p>
-          <h3 className="text-2xl font-bold text-brand-primary">{currentTeam.nom}</h3>
+          <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Équipe en cours</p>
+          <h3 className="text-2xl font-extrabold text-brand-primary">{currentTeam.nom}</h3>
         </div>
         <div>
-          <p className="text-sm uppercase text-neutral-500">Équipe suivante</p>
-          <h4 className="text-lg font-semibold text-neutral-700">{nextTeam.nom}</h4>
+          <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Équipe suivante</p>
+          <p className="text-lg font-semibold text-neutral-700">{nextTeam.nom}</p>
         </div>
         <div className="text-right">
-          <p className="text-sm uppercase text-neutral-500">
-            {isIntermission ? "Intermission" : "Temps restant"}
+          <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">
+            {isIntermission ? "Intermission" : "Temps équipe"}
           </p>
-          <p className="text-3xl font-bold text-neutral-900">{seconds}s</p>
+          <p className="text-3xl font-black text-neutral-900">{seconds}s</p>
         </div>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }
 

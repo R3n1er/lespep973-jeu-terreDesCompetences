@@ -24,27 +24,28 @@ export default function TimerDisplay({ timeRemaining, isRunning, alerts }: Timer
     }
   }, [alerts.fiveSeconds]);
 
-  let visualState = "border-emerald-500 text-emerald-600";
+  let visualState = "border-emerald-500 text-emerald-600 bg-emerald-50";
   if (alerts.fiveSeconds) {
-    visualState = "border-red-500 text-white bg-red-500 animate-[pulse_0.5s_ease-in-out_infinite]";
+    visualState = "border-red-600 bg-red-500 text-white animate-[pulse_0.5s_ease-in-out_infinite]";
   } else if (alerts.tenSeconds) {
-    visualState = "border-orange-500 text-orange-600 bg-orange-50 animate-[pulse_1s_ease-in-out_infinite]";
+    visualState = "border-orange-500 bg-orange-500/90 text-white animate-[pulse_1s_ease-in-out_infinite]";
   } else if (alerts.thirtySeconds) {
-    visualState = "border-amber-500 text-amber-600 bg-amber-50";
+    visualState = "border-amber-500 bg-amber-100 text-amber-700";
   }
 
   return (
     <div className="flex flex-col items-center gap-2">
       <div
         className={cn(
-          "rounded-full border-4 px-10 py-4 text-4xl font-bold shadow-card transition",
+          "rounded-[2.5rem] border-4 px-12 py-5 text-4xl font-black tracking-wider shadow-[0_10px_0_rgba(15,23,42,0.75)]",
+          "transition-transform duration-150",
           visualState
         )}
         aria-live="polite"
       >
         {minutes}:{seconds}
       </div>
-      <p className="text-sm uppercase tracking-wide text-neutral-500">
+      <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">
         {isRunning ? "Temps restant" : "En pause"}
       </p>
     </div>
