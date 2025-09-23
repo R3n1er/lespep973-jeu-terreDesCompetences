@@ -49,39 +49,47 @@ public/
   - Esquisser `src/data/challenges.ts` pour les 2 formats. (FAIT v1)
 - **Timer robuste**
   - `src/workers/timer.worker.ts` (tick ~20Hz, perf.now, reprise). (FAIT v1)
-  - `useGameTimer` (API: start, pause, set; alertes). (FAIT v1)
-  - `TimerDisplay` + compte à rebours audio-visuel 5s. (À FAIRE)
-  - Sons/vibration et fallback silencieux. (À FAIRE)
+  - `useGameTimer` (API: start, pause, set; alertes). (FAIT v1 avec countdownMode)
+  - `TimerDisplay` + compte à rebours audio-visuel 5s. (FAIT v1 — audio MP3 à fournir)
+  - Sons/vibration et fallback silencieux. (En cours: audio stub)
 - **Gameplay & écrans**
-  - `StartScreen`, `GameScreen`, `EndScreen`. (À FAIRE)
-  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`. (À FAIRE)
-  - Boutons de validation manuelle et intermission 5s. (À FAIRE)
+  - `StartScreen`, `GameScreen`, `EndScreen`. (FAIT v1 — flux minimal)
+  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`. (En cours: type 1 fait)
+  - Boutons de validation manuelle et intermission 5s. (Partiel: validation type 1 ok)
 - **Rotation équipes**
-  - `useTeamRotation` (2min30 + pause). (À FAIRE)
-  - UI: équipe active/suivante. (À FAIRE)
+  - `useTeamRotation` (2min30 + pause). (FAIT v1 — intégration GameScreen)
+  - UI: équipe active/suivante. (FAIT v1
+  - Tests unitaires rotation. (FAIT vitest)
 - **Persistance & export**
   - `GameDataManager` (IndexedDB + localStorage), export JSON. (À FAIRE)
 - **UI/Styles iPad**
   - Safe areas, cibles 44×44, marges, orientation paysage. (À FAIRE)
   - Icônes: **Lucide Icons (lucide-react)** pour une cohérence visuelle et accessibilité. (À FAIRE)
 - **Tests**
-  - Unitaires: timer, rotation, scoring, mapping données. (EN COURS ➜ smoke test OK)
-  - Intégration: flux de jeu complet. (À FAIRE)
+  - Unitaires: timer, rotation, scoring, mapping données. (EN COURS ➜ timer/rotation ok)
+  - Intégration: flux de jeu complet. (En cours: start→game)
   - E2E Playwright: iPad paysage, PWA offline. (À FAIRE)
 
 ## 4) Roadmap (jalons)
 
-- **J1–J2**: Setup outillage, PWA minimale, types de base, données métiers v1. [50%]
+- **J1–J2**: Setup outillage, PWA minimale, types de base, données métiers v1. [60%]
   - ✅ Scripts port 3000 / Vitest / ESLint / Type-check
-  - ✅ Types `game.ts`, données v1 (`metiers.ts`, `challenges.ts`)
+  - ✅ Types `game.ts`, données v1 (`metiers.ts`, `challenges.ts`, `teams.ts`)
   - ✅ SW placeholder + manifest paysage
-  - ⏳ Workbox + indicateur réseau + écrans de base
-- **J3–J4**: Timer Worker + hook + UI, rotation équipes, écrans Start/End. [20%]
-  - ✅ Worker + hook timer v1
-  - ⏳ UI Timer + rotation + écrans
-- **J5**: Défis v1 + transitions/feedback, persistance locale. [0%]
+  - ✅ Timer worker + hook + TimerDisplay + CountdownOverlay
+  - ⏳ Workbox + indicateur réseau + écrans définitifs
+- **J3–J4**: Timer Worker + hook + UI, rotation équipes, écrans Start/End. [70%]
+  - ✅ Worker + hook timer v1 + overlay
+  - ✅ Rotation équipes (`useTeamRotation` + panel)
+  - ✅ Écrans Start/Game/End (flux minimal)
+  - ⏳ UI dédiée (intermission 5s animée, transitions Motion)
+- **J5**: Défis v1 + transitions/feedback, persistance locale. [20%]
+  - ✅ ChallengeRenderer + type 1 + validation
+  - ⏳ Type 2 + feedback + stockage réponses
 - **J6**: Finitions UI iPad, a11y, animations, export résultats. [0%]
-- **J7**: Tests unitaires/intégration/E2E, optimisations, documentation. [10%]
+- **J7**: Tests unitaires/intégration/E2E, optimisations, documentation. [20%]
+  - ✅ Tests unitaires timer + rotation + défi type 1
+  - ⏳ Tests intégration (défi complet) + E2E iPad + offline
 
 ## 5) Risques & mitigations
 

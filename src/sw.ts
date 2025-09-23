@@ -1,11 +1,10 @@
 // Placeholder SW (Workbox pourra être ajouté ultérieurement)
-self.addEventListener('install', () => {
-  // @ts-ignore
-  self.skipWaiting()
-})
+self.addEventListener("install", () => {
+  const sw = self as unknown as ServiceWorkerGlobalScope;
+  sw.skipWaiting();
+});
 
-self.addEventListener('activate', () => {
-  // @ts-ignore
-  self.clients.claim()
-})
-
+self.addEventListener("activate", () => {
+  const sw = self as unknown as ServiceWorkerGlobalScope;
+  sw.clients.claim();
+});
