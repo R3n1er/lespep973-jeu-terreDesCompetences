@@ -267,10 +267,14 @@ interface GameMetrics {
 ```typescript
 interface GameTimer {
   phase:
-    | 'team1' | 'pause1'
-    | 'team2' | 'pause2'
-    | 'team3' | 'pause3'
-    | 'team4' | 'finished';
+    | "team1"
+    | "pause1"
+    | "team2"
+    | "pause2"
+    | "team3"
+    | "pause3"
+    | "team4"
+    | "finished";
   timeRemaining: number; // en millisecondes
   isRunning: boolean;
   lastUpdate: number; // performance.now()
@@ -299,9 +303,16 @@ let running = false;
 
 self.onmessage = (e) => {
   const { type, payload } = e.data;
-  if (type === 'START') { running = true; last = performance.now(); }
-  if (type === 'PAUSE') { running = false; }
-  if (type === 'SET') { remaining = payload.remaining; }
+  if (type === "START") {
+    running = true;
+    last = performance.now();
+  }
+  if (type === "PAUSE") {
+    running = false;
+  }
+  if (type === "SET") {
+    remaining = payload.remaining;
+  }
 };
 
 function tick() {
@@ -309,7 +320,7 @@ function tick() {
   if (running) {
     const delta = now - last;
     remaining = Math.max(0, remaining - delta);
-    (self as any).postMessage({ type: 'TICK', remaining });
+    (self as any).postMessage({ type: "TICK", remaining });
   }
   last = now;
   setTimeout(tick, 50); // ~20 Hz logique
@@ -1003,6 +1014,8 @@ class GameLogger {
 ```
 
 ## Planning de développement
+
+Note: le suivi opérationnel et l'état d'avancement sont tenus dans `../ROADMAP.md`.
 
 ### Phase 1 : Fondations (Semaine 1-2)
 
