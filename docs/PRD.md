@@ -27,6 +27,7 @@ Créer une application web interactive permettant aux équipes de découvrir les
 
 - **Tailwind CSS v4.0** : Framework CSS utility-first avec engine haute performance
 - **Shadcn/ui** : Bibliothèque de composants avec CLI 3.0 et support React 19
+- **Lucide Icons (lucide-react)** : Bibliothèque d’icônes légère et accessible
 - **CSS Cascade Layers** : Organisation des styles avec @layer
 - **Responsive Design** : Interface adaptable tablette/desktop
 

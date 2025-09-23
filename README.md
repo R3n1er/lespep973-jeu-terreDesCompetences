@@ -207,6 +207,7 @@ Des équipes de 15 personnes maximum se succèdent sur une tablette pendant **10
 
 - **Tailwind CSS v4.0** - Framework CSS utility-first nouvelle génération
 - **Shadcn/ui** - Composants React avec CLI 3.0
+- **Lucide Icons (lucide-react)** - Icônes SVG modernes, accessibles
 - **Motion 12.23.18** - Animations fluides (ex-Framer Motion)
 - **Radix UI** - Primitives accessibles
 

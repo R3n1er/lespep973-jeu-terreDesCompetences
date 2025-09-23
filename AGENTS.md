@@ -72,6 +72,7 @@ npx playwright test --ui
 - **Framework** : React 19.1 + TypeScript 5.6+
 - **Build tool** : Vite 7.0 avec Node.js 20.19+/22.12+
 - **UI/Styling** : Tailwind CSS v4 + shadcn/ui + Radix UI
+- **Icônes** : Lucide Icons (lucide-react)
 - **Animations** : Motion 12.23 (ex-Framer Motion)
 - **PWA** : Service Worker avec Workbox
 - **Stockage** : IndexedDB + localStorage

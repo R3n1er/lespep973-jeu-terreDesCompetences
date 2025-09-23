@@ -18,6 +18,7 @@ Node: 20.19+/22.12+   // ESM native
 // UI/Styling
 TailwindCSS: v4.0     // New engine, @layer, @theme
 Shadcn/ui: CLI 3.0    // React 19 + Tailwind v4 compatible
+Lucide Icons: lucide-react // Icones SVG modernes et accessibles
 Motion: 12.23.18      // Animations (ex-Framer Motion)
 Radix UI: primitives  // Accessibility
 

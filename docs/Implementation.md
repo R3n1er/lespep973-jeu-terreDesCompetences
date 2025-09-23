@@ -63,6 +63,7 @@ public/
   - `GameDataManager` (IndexedDB + localStorage), export JSON. (À FAIRE)
 - **UI/Styles iPad**
   - Safe areas, cibles 44×44, marges, orientation paysage. (À FAIRE)
+  - Icônes: **Lucide Icons (lucide-react)** pour une cohérence visuelle et accessibilité. (À FAIRE)
 - **Tests**
   - Unitaires: timer, rotation, scoring, mapping données. (EN COURS ➜ smoke test OK)
   - Intégration: flux de jeu complet. (À FAIRE)
