@@ -26,7 +26,7 @@ Elle a 2 pole :
 
 ### Principe général
 
-Des équopes de 15 personnes maximum se succèdent sur une tablette pendant **10 minutes au total**. Chaque équipe compose des groupes de 2 ou 3 personnes qui vont manipuler la tablette et réponse aux question. Chaque groupe en rotation dispose de **2 minutes 30** pour relever un maximum de défis d'association entre métiers et compétences.
+Des équipes de 15 personnes maximum se succèdent sur une tablette pendant **10 minutes au total**. Chaque équipe compose des groupes de 2 ou 3 personnes qui vont manipuler la tablette et réponse aux question. Chaque groupe en rotation dispose de **2 minutes 30** pour relever un maximum de défis d'association entre métiers et compétences.
 
 ### Types de défis
 
@@ -47,15 +47,54 @@ Des équopes de 15 personnes maximum se succèdent sur une tablette pendant **10
 - **Timer global :** 10 minutes pour toute la session
 - **Timer équipe :** 2min30 par équipe avec rotation automatique
 - **Bonus temps :** Plus vous répondez vite, plus vous gagnez de points !
-- **Alerte visuelle :** Changement de couleur à 30 secondes restantes
+- **Alertes visuelles :** Changement de couleur à 30 secondes restantes, compte à rebours animé dès 5 secondes restantes entre deux défis
+- **Alertes sonores :** Bip court par seconde sur les 5 dernières secondes puis signal distinct à 0
 
 ### 🏆 Scoring et niveaux
+
+#### Barème de base
+
+- **Défi réussi** : 100 points fixes
+- **Défi partiellement réussi** (métier → compétences, 4 ou 5 bonnes réponses) : 60 points
+- **Défi échoué** : 0 point, mais conservation de la progression
+
+#### Bonus de vitesse
+
+- Calculé sur le temps restant du défi (0 à 30 points)
+- Formule recommandée : `bonus = ⌈(temps_restant_en_secondes / durée_défi_en_secondes) × 30⌉`
+- Le bonus est plafonné à 30 points pour éviter les écarts trop importants
+
+#### Séries de bonnes réponses
+
+- 3 bonnes réponses consécutives : multiplicateur ×1,1 sur le prochain défi
+- 5 bonnes réponses consécutives : multiplicateur ×1,2
+- Une erreur réinitialise le multiplicateur
+
+#### Pénalité de rotation
+
+- Si l'équipe suivante dépasse son temps de pause (15 s par défaut), retrait de 10 points sur le score collectif pour encourager la fluidité des rotations
+
+#### Question bonus « Zone de repêchage »
+
+- Déclenchée si le score final collectif est compris entre **40 % et 50 %**
+- Format : défi « Métier → Compétences » simplifié (4 compétences à sélectionner)
+- Gain : 80 points + bonus de vitesse (max 20 points)
+- La réussite de la question bonus peut faire passer l'équipe dans la tranche supérieure
+
+#### Paliers de performance
 
 - **Performance exceptionnelle (>80%)** : "Vous maîtrisez parfaitement nos métiers !"
 - **Belle réussite (65-80%)** : "Excellente culture transversale !"
 - **Bonne performance (50-65%)** : "Belle découverte de nos activités !"
 - **Seconde chance (40-50%)** : Question bonus collective
 - **Apprentissage renforcé (<40%)** : Débriefing approfondi
+
+#### Optimisations possibles
+
+- Ajouter un **bonus d'équipe collaborative** (+20 points) quand toutes les équipes réussissent au moins un défi dans leur rotation
+- Activer un **malus d'erreur rapide** (-10 points) si 3 réponses incorrectes surviennent en moins de 60 secondes
+- Introduire un **score thématique** : certains métiers « focus » de l'évènement valent +15 % afin de mettre en avant une campagne spécifique
+- Permettre un **joker pédagogique** utilisable une fois par session pour demander un indice (-20 points sur le score final)
 
 ## ✨ Fonctionnalités principales
 
@@ -116,7 +155,7 @@ Des équopes de 15 personnes maximum se succèdent sur une tablette pendant **10
 
 - Liste des compétences présentées
 - Grille de métiers possibles (4-6 options)
-- Bouton de validation
+- Bouton de validation pour soumettre la réponse et passer au défi suivant
 - Indicateur de temps restant
 
 #### Métier → Compétences
@@ -124,7 +163,7 @@ Des équopes de 15 personnes maximum se succèdent sur une tablette pendant **10
 - Card du métier cible
 - Grille de compétences (12 options, 6 à choisir)
 - Compteur de sélection
-- Validation avec récapitulatif
+- Validation avec récapitulatif avant passage automatique ou anticipé au défi suivant
 
 ### 5. ✅ **Écran feedback**
 
@@ -211,10 +250,10 @@ cd terres-competences
 # Installer les dépendances
 npm install
 
-# Démarrer en mode développement
+# Démarrer en mode développement (port 3000)
 npm run dev
 
-# Ouvrir http://localhost:5173
+# Ouvrir http://localhost:3000
 ```
 
 ### Build de production
@@ -223,8 +262,10 @@ npm run dev
 # Générer le build optimisé
 npm run build
 
-# Prévisualiser en local
+# Prévisualiser en local (port 3000)
 npm run preview
+
+# Ouvrir http://localhost:3000
 ```
 
 ## 📂 Structure du projet
@@ -256,7 +297,7 @@ terres-competences/
 ### Commandes disponibles
 
 ```bash
-npm run test          # Tests unitaires
+npm run test          # Tests unitaires (Vitest)
 npm run test:watch    # Tests en mode watch
 npm run lint          # Vérification du code
 npm run type-check    # Vérification TypeScript
@@ -265,7 +306,7 @@ npm run type-check    # Vérification TypeScript
 ### Couverture de tests
 
 - **Composants UI** : Tests avec Testing Library
-- **Logique métier** : Tests unitaires Jest
+- **Logique métier** : Tests unitaires Vitest
 - **Intégration** : Tests de flux complet
 - **Accessibilité** : Tests automatisés a11y
 
@@ -290,8 +331,6 @@ npm run type-check    # Vérification TypeScript
 ### Équipe projet
 
 - **Responsable Informatique ADPEP GUYANE**
-- **Équipe technique** : Carole, Françoise
-- **Direction** : Elsa, Jade
 
 ### En cas de problème
 
@@ -331,3 +370,8 @@ npm run type-check    # Vérification TypeScript
 **🎮 Prêt à découvrir les Terres de Compétences de l'ADPEP GUYANE ?**
 
 _Que le meilleur esprit d'équipe gagne !_ 🏆
+
+## 📊 État d’avancement (synthèse)
+
+- **En place**: scripts port 3000 strict, Vitest + RTL (smoke), ESLint, type-check, manifest paysage, SW placeholder, types et données v1, worker + hook timer v1.
+- **À venir**: UI écrans (Start/Game/End), ChallengeRenderer + défis, rotation équipes, Workbox + offline complet, tests d’intégration et E2E iPad.

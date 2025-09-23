@@ -34,36 +34,34 @@ Références:
 
 ### 3) Timer robuste, précis et résilient
 
-- Phases: `team1 → pause1 → team2 → pause2 → team3 → pause3 → team4 → finished`.
-- Durées: équipe 2 min 30 s (alertes à 30 s et 10 s), pause 15–20 s (par défaut 15 s).
+- Phases dynamiques: alternance `team[n] → intermission → team[n+1]` générée selon le nombre d'équipes configuré (1 à 13), puis `finished`.
+- Durées: 2 min 30 s par équipe (alertes à 30 s, 10 s, déclenchement d'un compte à rebours spécial à 5 s), intermission 15–20 s (par défaut 15 s) pour la transition et la préparation du défi suivant.
 - Précision: calculs basés sur `performance.now()`; rendu via `requestAnimationFrame`; logique dans un Web Worker (tick ~20 Hz) pour éviter les blocages UI.
-- Rattrapage d’interruption: snapshot de `phase`, `currentTeam`, `timeRemaining`, `lastUpdate` chaque seconde et à `visibilitychange/pagehide`; reprise à l’identique; correction lissée si dérive > 1 s.
-- Alertes: thème qui vire à l’orange/rouge à 30 s, clignotement à 10 s, vibration opportuniste si supportée.
+- Rattrapage d’interruption: snapshot de `phase`, `currentTeamIndex`, `timeRemaining`, `lastUpdate` chaque seconde et sur `visibilitychange/pagehide`; reprise à l’identique; correction lissée si dérive > 1 s.
+- Alertes: thème qui vire à l’orange/rouge à 30 s, clignotement à 10 s, décompte audio-visuel 5→0 avec bip par seconde (signal distinct à 0) et vibration opportuniste si supportée.
 
 Structure de données (référence PRD):
 
 ```typescript
 interface GameTimer {
-  phase:
-    | "team1"
-    | "pause1"
-    | "team2"
-    | "pause2"
-    | "team3"
-    | "pause3"
-    | "team4"
-    | "finished";
+  phase: "team" | "intermission" | "finished";
   timeRemaining: number; // ms
   isRunning: boolean;
   lastUpdate: number; // performance.now()
-  currentTeam: number; // 1..4
-  alerts: { thirtySeconds: boolean; tenSeconds: boolean };
+  currentTeamIndex: number; // 0..teams.length-1
+  alerts: {
+    thirtySeconds: boolean;
+    tenSeconds: boolean;
+    fiveSeconds: boolean;
+  };
+  countdownMode: "none" | "visual" | "audio-visual";
 }
 ```
 
-### 4) UX: écrans d’accueil et de fin
+### 4) UX: écrans d’accueil, défis et fin
 
 - Accueil: boutons « Lire les règles » (affichage embarqué offline) et « Commencer le jeu », indicateur réseau.
+- Défis: chaque écran de défi fournit un bouton de validation explicite permettant de soumettre la réponse et de déclencher l’intermission (compte à rebours 5 s). En absence de validation manuelle, le passage s’effectue automatiquement à l’expiration du timer.
 - Fin de jeu: récapitulatif (scores, pourcentage), « Nouvelle session », « Voir les règles », « Exporter les résultats » (local si offline).
 
 ### 5) Cible iPad paysage et contraintes d’écran
@@ -111,7 +109,8 @@ Points d’attention:
 
 ## Suivi et implémentation
 
-- Générer squelettes techniques: `timer.worker.ts`, hook `useGameTimer`, écrans `StartScreen`/`EndScreen`.
+- Générer squelettes techniques: `timer.worker.ts`, hook `useGameTimer`, écrans `StartScreen`/`EndScreen`, composant de compte à rebours audio-visuel 5 s.
 - Mettre en place Service Worker (Workbox) + manifest PWA.
 - Créer IndexedDB (schéma sessions/résultats) + export JSON.
+- Implémenter contrôles de validation manuelle des défis (UI + logique) avec fallback auto sur expiration du timer.
 - Couvrir par tests Vitest/Testing Library et Playwright (viewport iPad paysage).

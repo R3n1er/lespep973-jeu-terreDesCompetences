@@ -20,7 +20,7 @@ Créer une application web interactive permettant aux équipes de découvrir les
 
 - **React 19.1.0** : Framework UI avec Server Components, Actions, useActionState
 - **TypeScript 5.6+** : Typage statique pour la robustesse du code
-- **Vite 7.0** : Build tool avec Rolldown bundler (performance 5x supérieure)
+- **Vite 7.0** : Build tool avec Rolldown bundler (dev/preview sur port 3000)
 - **Node.js 20.19+/22.12+** : Runtime JavaScript moderne
 
 #### Styling et UI
@@ -243,10 +243,10 @@ interface GameMetrics {
 
 ### Timer synchronisé et robuste
 
-- **Phases**: itération en séquence Équipe 1 → Pause → Équipe 2 → Pause → Équipe 3 → Pause → Équipe 4 → Fin.
+- **Phases**: alternance dynamique `team[n] → intermission → team[n+1]` générée en fonction du nombre d’équipes configuré (1 à 13), puis `finished`.
 - **Durées**:
-  - Temps par équipe: 2 min 30 s (150 000 ms), alertes à T−30 s et T−10 s.
-  - Pause: 15–20 s configurable (par défaut: 15 000 ms).
+  - Temps par équipe: 2 min 30 s (150 000 ms), alertes à T−30 s, T−10 s et déclenchement d’un compte à rebours spécial à T−5 s.
+  - Intermission: 15–20 s configurable (par défaut: 15 000 ms) utilisée pour les transitions d’équipe et la préparation du défi suivant.
 - **Précision**:
   - Calcul deltas avec `performance.now()` (monotone) plutôt que `Date.now()`.
   - Rendu des updates via `requestAnimationFrame` côté UI pour un affichage fluide.
@@ -258,6 +258,7 @@ interface GameMetrics {
 - **Alertes visuelles/sonores**:
   - À 30 s: transition progressive de thème (accent → orange/rouge), badge « 30 s ».
   - À 10 s: animation de clignotement et son court; vibration si `navigator.vibrate` disponible (dégradé silencieux sinon).
+  - À 5 s: déclenchement d’un compte à rebours visuel pleine largeur synchronisé avec un bip par seconde et un signal distinct à 0, utilisé aussi bien en phase de défi qu’en intermission entre deux questions.
 - **Persistance**:
   - État léger (timer/alertes): `localStorage` avec clé namespacée.
   - État de session complet (équipes, réponses, scores): `IndexedDB`.
@@ -266,23 +267,17 @@ interface GameMetrics {
 
 ```typescript
 interface GameTimer {
-  phase:
-    | "team1"
-    | "pause1"
-    | "team2"
-    | "pause2"
-    | "team3"
-    | "pause3"
-    | "team4"
-    | "finished";
+  phase: "team" | "intermission" | "finished";
   timeRemaining: number; // en millisecondes
   isRunning: boolean;
   lastUpdate: number; // performance.now()
-  currentTeam: number; // 1..4
+  currentTeamIndex: number; // 0..teams.length-1
   alerts: {
     thirtySeconds: boolean;
     tenSeconds: boolean;
+    fiveSeconds: boolean;
   };
+  countdownMode: "none" | "visual" | "audio-visual";
 }
 ```
 
@@ -293,7 +288,7 @@ interface GameTimer {
 - **Synchronisation**: le worker publie `timeRemaining` et `phase`; côté UI, on dérive les alertes et l’habillage visuel.
 - **Rattrapage d’interruption**: snapshot sérialisé chaque seconde et à chaque changement de visibilité; reprise idempotente même après crash.
 - **Reset manuel**: action « Nouvelle session » force un nettoyage de l’état (localStorage + IndexedDB) pour éviter les corruptions persistées.
-- **Alertes visuelles**: changement de couleur à 30 s, clignotement à 10 s; vibration non bloquante si supportée (iPadOS: support limité).
+- **Alertes visuelles**: changement de couleur à 30 s, clignotement à 10 s, compte à rebours plein écran + audio sur les 5 dernières secondes avant passage au défi suivant.
 
 ```typescript
 // Esquisse de worker (timer.worker.ts)
@@ -358,6 +353,9 @@ function CompetencesToMetierChallenge({ challenge, onAnswer }: ChallengeProps) {
 }
 ```
 
+- Le bouton de soumission est disponible en permanence et permet de valider la réponse pour passer immédiatement au défi suivant.
+- Si la validation n’est pas déclenchée manuellement, le compte à rebours standard continue et le passage se fait automatiquement lorsque le temps est écoulé.
+
 #### Défi type 2 : Métier → Compétences
 
 ```typescript
@@ -385,6 +383,9 @@ function MetierToCompetencesChallenge({ challenge, onAnswer }: ChallengeProps) {
   );
 }
 ```
+
+- Le panneau de validation affiche l’état de complétion (0/6 → 6/6) et reste activable même avant la limite des 6 choix pour permettre une réponse partielle.
+- À l’envoi, le système déclenche la transition vers le décompte intermission de 5 secondes avec feedback sonore/visuel.
 
 ### 2. Gestion des équipes et rotation
 
@@ -847,12 +848,12 @@ describe("Game Flow Integration", () => {
 ### Scripts de build et déploiement
 
 ```json
-// package.json scripts
+// package.json scripts (synchronisés)
 {
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "vite --port 3000 --strictPort",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 3000 --strictPort",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src --ext .ts,.tsx",

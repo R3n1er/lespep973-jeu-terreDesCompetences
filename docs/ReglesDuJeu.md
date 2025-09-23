@@ -10,7 +10,7 @@ Que vous travailliez dans les services administratifs, paramédicaux, pédagogiq
 
 ### Votre mission collective
 
-Votre groupe de 13 personnes va relever ensemble un défi passionnant : associer correctement des compétences professionnelles avec les métiers correspondants de notre association.
+Votre groupe va relever ensemble un défi passionnant : associer correctement des compétences professionnelles avec les métiers correspondants de notre association.
 
 ### Deux types de défis
 

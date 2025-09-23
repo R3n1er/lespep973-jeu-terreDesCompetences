@@ -1,0 +1,11 @@
+{
+  "name": "Terres de Compétences - ADPEP GUYANE",
+  "short_name": "TerComp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0B66C3",
+  "orientation": "landscape",
+  "icons": []
+}
+

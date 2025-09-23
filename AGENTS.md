@@ -75,7 +75,7 @@ npx playwright test --ui
 - **Animations** : Motion 12.23 (ex-Framer Motion)
 - **PWA** : Service Worker avec Workbox
 - **Stockage** : IndexedDB + localStorage
-- **Tests** : Jest + Testing Library + Playwright
+- **Tests** : Vitest + Testing Library + Playwright
 
 ## 📁 Structure du projet
 
@@ -96,10 +96,12 @@ src/
 
 ### Contraintes importantes
 
-- **Orientation iPad** : Paysage uniquement, cibles tactiles min 44×44px adapté aux IPAD récent.
+- **Orientation iPad** : Paysage uniquement, cibles tactiles min 44×44px adapté aux iPad récents.
 - **Mode hors-ligne** : PWA avec persistance locale (IndexedDB)
 - **Timer précis** : Web Worker avec `performance.now()` et rattrapage d'interruption
-- **4 équipes** : Rotation automatique de 2min30 + pauses 15s
+- **Jusqu'à 13 équipes** : Session de 10 minutes, rotation automatique 2min30 par équipe, pause 15s entre deux passages
+- **Alertes fin de défi** : Compte à rebours visuel et sonore sur les 5 dernières secondes avant le défi suivant
+- **Validation manuelle** : Chaque défi doit proposer un bouton de validation pour confirmer la réponse et avancer
 - **RGPD** : Aucune donnée personnelle, stockage local uniquement
 
 ### Types de défis

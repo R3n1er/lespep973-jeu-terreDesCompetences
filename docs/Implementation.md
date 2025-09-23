@@ -37,42 +37,50 @@ public/
 ## 3) Tâches d’implémentation (détail)
 
 - **Outillage & qualité**
-  - Init Vite React+TS, Tailwind v4, ESLint/Prettier, Husky, Vitest/RTL, Playwright.
-  - Scripts npm: dev, build, preview, test, test:watch, lint, lint:fix, type-check, pre-commit.
+  - Init Vite React+TS, Tailwind v4, ESLint/Prettier, Husky, Vitest/RTL, Playwright. (EN COURS ➜ base faite)
+  - Scripts npm: dev (port 3000 strict), build, preview (3000), test, test:watch, lint, lint:fix, type-check, pre-commit. (FAIT)
 - **PWA offline-first**
-  - `manifest.webmanifest` (paysage), icônes, `theme_color`.
-  - Service Worker Workbox: pré-cache shell, runtime caching, fallback offline.
-  - Détection `online/offline` + pastille d’état en UI.
+  - `manifest.webmanifest` (paysage), icônes, `theme_color`. (FAIT v1)
+  - Service Worker Workbox: pré-cache shell, runtime caching, fallback offline. (À FAIRE: placeholder SW créé)
+  - Détection `online/offline` + pastille d’état en UI. (À FAIRE)
 - **Données & types**
-  - Types dans `src/types/*`.
-  - Générer `src/data/metiers.ts` depuis la liste docs.
-  - Esquisser `src/data/challenges.ts` pour les 2 formats.
+  - Types dans `src/types/*`. (FAIT v1)
+  - Générer `src/data/metiers.ts` depuis la liste docs. (FAIT v1 — à compléter)
+  - Esquisser `src/data/challenges.ts` pour les 2 formats. (FAIT v1)
 - **Timer robuste**
-  - `src/workers/timer.worker.ts` (tick ~20Hz, perf.now, reprise).
-  - `useGameTimer` (API: start, pause, set, subscribe; alertes 30s/10s).
-  - `TimerDisplay` (feedback couleur/animation).
+  - `src/workers/timer.worker.ts` (tick ~20Hz, perf.now, reprise). (FAIT v1)
+  - `useGameTimer` (API: start, pause, set; alertes). (FAIT v1)
+  - `TimerDisplay` + compte à rebours audio-visuel 5s. (À FAIRE)
+  - Sons/vibration et fallback silencieux. (À FAIRE)
 - **Gameplay & écrans**
-  - `StartScreen` (Lire les règles / Commencer), `GameScreen`, `EndScreen` (Nouvelle session, Export).
-  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`.
+  - `StartScreen`, `GameScreen`, `EndScreen`. (À FAIRE)
+  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`. (À FAIRE)
+  - Boutons de validation manuelle et intermission 5s. (À FAIRE)
 - **Rotation équipes**
-  - `useTeamRotation` (2min30 + pause), synchronisé au timer.
-  - UI: équipe active, suivante, progression.
+  - `useTeamRotation` (2min30 + pause). (À FAIRE)
+  - UI: équipe active/suivante. (À FAIRE)
 - **Persistance & export**
-  - `GameDataManager` (IndexedDB + localStorage), export JSON anonymisé.
+  - `GameDataManager` (IndexedDB + localStorage), export JSON. (À FAIRE)
 - **UI/Styles iPad**
-  - Safe areas, cibles 44×44, marges 24–32px, orientation verrouillée paysage.
+  - Safe areas, cibles 44×44, marges, orientation paysage. (À FAIRE)
 - **Tests**
-  - Unitaires: timer précision/rattrapage, rotation, scoring, mapping données.
-  - Intégration: flux de jeu complet.
-  - E2E Playwright: iPad paysage, PWA offline, interactions tactiles.
+  - Unitaires: timer, rotation, scoring, mapping données. (EN COURS ➜ smoke test OK)
+  - Intégration: flux de jeu complet. (À FAIRE)
+  - E2E Playwright: iPad paysage, PWA offline. (À FAIRE)
 
 ## 4) Roadmap (jalons)
 
-- **J1–J2**: Setup outillage, PWA minimale, types de base, données métiers v1.
-- **J3–J4**: Timer Worker + hook + UI, rotation équipes, écrans Start/End.
-- **J5**: Défis v1 (2 types) + transitions/feedback, persistance locale.
-- **J6**: Finitions UI iPad, a11y, animations, export résultats.
-- **J7**: Tests unitaires/intégration/E2E, optimisations, documentation.
+- **J1–J2**: Setup outillage, PWA minimale, types de base, données métiers v1. [50%]
+  - ✅ Scripts port 3000 / Vitest / ESLint / Type-check
+  - ✅ Types `game.ts`, données v1 (`metiers.ts`, `challenges.ts`)
+  - ✅ SW placeholder + manifest paysage
+  - ⏳ Workbox + indicateur réseau + écrans de base
+- **J3–J4**: Timer Worker + hook + UI, rotation équipes, écrans Start/End. [20%]
+  - ✅ Worker + hook timer v1
+  - ⏳ UI Timer + rotation + écrans
+- **J5**: Défis v1 + transitions/feedback, persistance locale. [0%]
+- **J6**: Finitions UI iPad, a11y, animations, export résultats. [0%]
+- **J7**: Tests unitaires/intégration/E2E, optimisations, documentation. [10%]
 
 ## 5) Risques & mitigations
 
@@ -82,12 +90,13 @@ public/
 
 ## 6) Livrables initiaux (à créer)
 
-- `src/workers/timer.worker.ts`
-- `src/hooks/useGameTimer.ts`
-- `src/components/screens/StartScreen.tsx`
-- `src/components/screens/EndScreen.tsx`
-- `src/components/game/ChallengeRenderer.tsx`
-- `src/data/metiers.ts`, `src/data/challenges.ts`
-- `src/types/*`
-- `public/manifest.webmanifest`, `src/sw.ts`
-- `tests/` (timer, rotation, défis)
+- `src/workers/timer.worker.ts` (créé)
+- `src/hooks/useGameTimer.ts` (créé)
+- `src/components/screens/StartScreen.tsx` (à créer)
+- `src/components/screens/EndScreen.tsx` (à créer)
+- `src/components/game/ChallengeRenderer.tsx` (à créer)
+- `src/components/game/CountdownOverlay.tsx` (à créer)
+- `src/data/metiers.ts`, `src/data/challenges.ts` (créés v1)
+- `src/types/*` (créé `game.ts`)
+- `public/manifest.webmanifest`, `src/sw.ts` (créés v1)
+- `tests/` (smoke test OK; à compléter)

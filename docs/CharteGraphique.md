@@ -45,9 +45,9 @@ Déclarer des variables CSS et les référencer dans Tailwind.
 
 @layer theme {
   :root {
-    --brand-primary: #0A6CC2;
-    --brand-secondary: #24A148;
-    --brand-accent: #FF7A00;
+    --brand-primary: #0a6cc2;
+    --brand-secondary: #24a148;
+    --brand-accent: #ff7a00;
 
     --neutral-0: #fff;
     --neutral-50: #f7f7f7;
@@ -62,40 +62,43 @@ Déclarer des variables CSS et les référencer dans Tailwind.
 }
 
 @layer base {
-  html { color: var(--neutral-900); background: var(--neutral-0); }
+  html {
+    color: var(--neutral-900);
+    background: var(--neutral-0);
+  }
 }
 ```
 
 ```ts
 // tailwind.config.ts
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 export default {
-  content: ['./index.html','./src/**/*.{ts,tsx}'],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         brand: {
-          primary: 'var(--brand-primary)',
-          secondary: 'var(--brand-secondary)',
-          accent: 'var(--brand-accent)'
+          primary: "var(--brand-primary)",
+          secondary: "var(--brand-secondary)",
+          accent: "var(--brand-accent)",
         },
         neutral: {
-          0: 'var(--neutral-0)',
-          50: 'var(--neutral-50)',
-          100: 'var(--neutral-100)',
-          700: 'var(--neutral-700)',
-          900: 'var(--neutral-900)'
+          0: "var(--neutral-0)",
+          50: "var(--neutral-50)",
+          100: "var(--neutral-100)",
+          700: "var(--neutral-700)",
+          900: "var(--neutral-900)",
         },
-        success: 'var(--success)',
-        warning: 'var(--warning)',
-        danger: 'var(--danger)'
+        success: "var(--success)",
+        warning: "var(--warning)",
+        danger: "var(--danger)",
       },
-      borderRadius: { md: '12px', lg: '16px', xl: '24px' },
-      boxShadow: { card: '0 8px 24px rgba(0,0,0,0.08)' }
-    }
+      borderRadius: { md: "12px", lg: "16px", xl: "24px" },
+      boxShadow: { card: "0 8px 24px rgba(0,0,0,0.08)" },
+    },
   },
-  plugins: []
-} satisfies Config
+  plugins: [],
+} satisfies Config;
 ```
 
 ## 3) Typographies
@@ -112,9 +115,13 @@ export default {
 /* src/styles/typography.css */
 @layer base {
   :root {
-    --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol";
   }
-  html { font-family: var(--font-sans); }
+  html {
+    font-family: var(--font-sans);
+  }
 }
 ```
 
@@ -176,4 +183,3 @@ public/
 ---
 
 Note : Les codes exacts et variantes (clair/sombre) doivent être validés par la communication des LES PEP GUYANE. Référence : [site officiel](https://www.lespep973.org/).
-
