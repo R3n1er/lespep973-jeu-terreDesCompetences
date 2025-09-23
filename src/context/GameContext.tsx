@@ -1,4 +1,9 @@
-import { useEffect, useMemo, useReducer, useRef } from "react";
+import {
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from "react";
 import type { ChallengeResponse, GameState } from "@/types/game";
 import { CHALLENGES_CONFIGURATION } from "@/data/challenges";
 import { TEAMS_SAMPLE } from "@/data/teams";
@@ -10,8 +15,10 @@ import {
   persistResponse,
   persistScoreToLocalStorage,
   clearStorage,
+  persistSessionSnapshot,
+  loadSessionSnapshot,
 } from "@/lib/storage";
-import { applyScore } from "@/lib/scoring";
+import { applyScore, calculatePartialScore } from "@/lib/scoring";
 import { GameContext, GameContextValue } from "@/context/gameContextShared";
 import { useOfflinePersistence } from "@/context/useOfflinePersistence";
 
@@ -56,13 +63,23 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           CHALLENGES_CONFIGURATION[action.payload.index] ?? null,
         challengeIndex: action.payload.index,
       };
-    case "REGISTER_RESPONSE":
+    case "REGISTER_RESPONSE": {
+      const challenge = CHALLENGES_CONFIGURATION.find((c) => c.id === action.payload.challengeId);
+      const breakdown = challenge
+        ? calculatePartialScore(challenge, action.payload)
+        : { pointsEarned: action.payload.pointsEarned, isCorrect: action.payload.isCorrect };
+      const enrichedResponse: ChallengeResponse = {
+        ...action.payload,
+        pointsEarned: breakdown.pointsEarned,
+        isCorrect: breakdown.isCorrect,
+      };
       return {
         ...state,
-        responses: [...state.responses, action.payload],
-        score: applyScore(state.score, action.payload),
+        responses: [...state.responses, enrichedResponse],
+        score: applyScore(state.score, enrichedResponse),
         currentChallenge: null,
       };
+    }
     case "NEXT_TEAM":
       return {
         ...state,
@@ -92,7 +109,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const persistedState = await loadPersistedGameState();
+      const snapshot = loadSessionSnapshot();
+      const persistedState = snapshot ?? (await loadPersistedGameState());
       const persistedResponses = await loadResponses();
       const persistedScore = await loadScoreFromLocalStorage();
 
@@ -114,6 +132,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     void persistGameState(state);
     persistScoreToLocalStorage(state.score);
+    persistSessionSnapshot({
+      phase: state.phase,
+      challengeIndex: state.challengeIndex,
+      currentTeamIndex: state.currentTeamIndex,
+    });
   }, [state]);
 
   useEffect(() => {
@@ -138,8 +161,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       },
       nextTeam: () => dispatch({ type: "NEXT_TEAM" }),
       advanceChallenge: () => {
-        const nextIndex =
-          (state.challengeIndex + 1) % CHALLENGES_CONFIGURATION.length;
+        const nextIndex = (state.challengeIndex + 1) % CHALLENGES_CONFIGURATION.length;
         dispatch({ type: "SET_CHALLENGE", payload: { index: nextIndex } });
       },
       resetGame: async () => {

@@ -54,9 +54,9 @@ Créer une application web interactive permettant aux équipes de découvrir les
 #### Mode hors-ligne (Offline-first)
 
 - **PWA + Service Worker (Workbox injectManifest)** : pré-cache du shell applicatif (HTML/CSS/JS), routes de repli hors-ligne (NetworkFirst
-de documents, Stale-While-Revalidate des assets, CacheFirst images).
+  de documents, Stale-While-Revalidate des assets, CacheFirst images).
 - **Persistance locale** : IndexedDB (via `idb`) pour les données de sessions et scores. `localStorage` réservé aux états légers (timer, drapeaux d'alerte) avec sérialisation robuste.
-- **Synchronisation différée** : file d'actions hors-ligne + Background Sync (si supporté) pour envoyer les exports/statistiques à la reconnexion.
+- **Export JSON** : possibilité d'exporter/importer les sessions via GameDataManager.
 - **Détection réseau** : indicateur UI (On/Off) et écouteurs `online`/`offline` pour adapter les feedbacks sans interrompre la partie.
 - **iOS/iPad PWA** : tenir compte des limites (quota stockage, mise en veille agressive). Dégradations élégantes prévues si Background Sync indisponible.
 

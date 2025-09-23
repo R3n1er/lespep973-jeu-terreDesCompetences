@@ -54,14 +54,14 @@ public/
   - Sons/vibration et fallback silencieux. (En cours: audio stub)
 - **Gameplay & écrans**
   - `StartScreen`, `GameScreen`, `EndScreen`. (FAIT v1 — flux minimal)
-  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`. (FAIT v1 pour 2 défis)
-  - Boutons de validation manuelle et intermission 5s. (Partiel: feedback/transition en place)
+  - `ChallengeRenderer`, `CompetencesToMetier`, `MetierToCompetences`, `AnswerFeedback`, `ChallengeTransition`, `StatsPanel`. (FAIT v1 pour 2 défis + feedback détaillé)
+  - Boutons de validation manuelle et intermission 5s. (FAIT — feedback scoring partiel)
 - **Rotation équipes**
   - `useTeamRotation` (2min30 + pause). (FAIT v1 — intégration GameScreen)
   - UI: équipe active/suivante. (FAIT v1
   - Tests unitaires rotation. (FAIT vitest)
 - **Persistance & export**
-  - `GameDataManager` (IndexedDB + localStorage), export JSON. (EN PROGRÈS: GameContext + queue offline)
+  - `GameDataManager` (IndexedDB + localStorage + export JSON). (FAIT)
 - **UI/Styles iPad**
   - Safe areas, cibles 44×44, marges, orientation paysage. (À FAIRE)
   - Icônes: **Lucide Icons (lucide-react)** pour une cohérence visuelle et accessibilité. (À FAIRE)
@@ -83,9 +83,9 @@ public/
   - ✅ Rotation équipes (`useTeamRotation` + panel)
   - ✅ Écrans Start/Game/End (flux minimal)
   - ⏳ UI dédiée (intermission 5s animée, transitions Motion)
-- **J5**: Défis v1 + transitions/feedback, persistance locale. [60%]
-  - ✅ ChallengeRenderer + type 1 + type 2 + feedback de base
-  - ✅ Persistance GameContext (IndexedDB + localStorage + queue offline)
+- **J5**: Défis v1 + transitions/feedback, persistance locale. [90%]
+  - ✅ ChallengeRenderer + type 1 + type 2 + feedback détaillé/stats
+  - ✅ Persistance GameContext (IndexedDB + localStorage + queue offline + export JSON)
 - **J6**: Finitions UI iPad, a11y, animations, export résultats. [0%]
 - **J7**: Tests unitaires/intégration/E2E, optimisations, documentation. [30%]
   - ✅ Tests unitaires timer + rotation + scoring + défis

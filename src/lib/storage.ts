@@ -6,7 +6,7 @@ const DB_VERSION = 1;
 const STORE_GAME_STATE = "game-state";
 const STORE_RESPONSES = "responses";
 
-let dbPromise: Promise<IDBDatabase | null> | null = null;
+let dbPromise: Promise<IDBPDatabase | null> | null = null;
 
 async function getDB() {
   if (typeof indexedDB === "undefined") {
@@ -20,7 +20,8 @@ async function getDB() {
           db.createObjectStore(STORE_GAME_STATE, { keyPath: "id" });
         }
         if (!db.objectStoreNames.contains(STORE_RESPONSES)) {
-          db.createObjectStore(STORE_RESPONSES, { keyPath: "key" });
+          const store = db.createObjectStore(STORE_RESPONSES, { keyPath: "key" });
+          store.createIndex("byTimestamp", "response.timestamp");
         }
       },
     }).catch(() => null);
@@ -73,7 +74,7 @@ export async function loadResponses(): Promise<ChallengeResponse[]> {
     const db = await getDB();
     if (!db) return [];
     const tx = db.transaction(STORE_RESPONSES, "readonly");
-    const values = await tx.store.getAll();
+    const values = await tx.store.index("byTimestamp").getAll();
     await tx.done;
     return values.map((entry) => entry.response as ChallengeResponse);
   } catch (error) {
@@ -82,11 +83,12 @@ export async function loadResponses(): Promise<ChallengeResponse[]> {
   }
 }
 
-const LOCAL_STORAGE_KEY = "adpep-score";
+const LOCAL_SCORE_KEY = "adpep-score";
+const LOCAL_STATE_KEY = "adpep-session";
 
 export function loadScoreFromLocalStorage(): ScoreData | null {
   try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const raw = localStorage.getItem(LOCAL_SCORE_KEY);
     return raw ? (JSON.parse(raw) as ScoreData) : null;
   } catch (error) {
     console.warn("Impossible de charger le score local", error);
@@ -96,10 +98,71 @@ export function loadScoreFromLocalStorage(): ScoreData | null {
 
 export function persistScoreToLocalStorage(score: ScoreData) {
   try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(score));
+    localStorage.setItem(LOCAL_SCORE_KEY, JSON.stringify(score));
   } catch (error) {
     console.warn("Impossible de persister le score local", error);
   }
+}
+
+export function loadSessionSnapshot(): Partial<GameState> | null {
+  try {
+    const raw = sessionStorage.getItem(LOCAL_STATE_KEY);
+    return raw ? (JSON.parse(raw) as Partial<GameState>) : null;
+  } catch (error) {
+    console.warn("Impossible de charger le snapshot de session", error);
+    return null;
+  }
+}
+
+export function persistSessionSnapshot(snapshot: Partial<GameState>) {
+  try {
+    sessionStorage.setItem(LOCAL_STATE_KEY, JSON.stringify(snapshot));
+  } catch (error) {
+    console.warn("Impossible de persister le snapshot de session", error);
+  }
+}
+
+const QUEUE_KEY = "adpep-offline-responses";
+function getOfflineQueue(): ChallengeResponse[] {
+  try {
+    const raw = sessionStorage.getItem(QUEUE_KEY);
+    return raw ? (JSON.parse(raw) as ChallengeResponse[]) : [];
+  } catch (error) {
+    console.warn("Impossible de récupérer la file offline", error);
+    return [];
+  }
+}
+function saveOfflineQueue(queue: ChallengeResponse[]) {
+  try {
+    sessionStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+  } catch (error) {
+    console.warn("Impossible de sauvegarder la file offline", error);
+  }
+}
+
+export function queueOfflineResponse(response: ChallengeResponse) {
+  const queue = getOfflineQueue();
+  queue.push(response);
+  saveOfflineQueue(queue);
+}
+
+export function flushOfflineQueue(): ChallengeResponse[] {
+  const queue = getOfflineQueue();
+  saveOfflineQueue([]);
+  return queue;
+}
+
+export async function exportGameData(): Promise<{
+  state: Partial<GameState> | null;
+  responses: ChallengeResponse[];
+  score: ScoreData | null;
+}> {
+  const [state, responses, score] = await Promise.all([
+    loadPersistedGameState(),
+    loadResponses(),
+    Promise.resolve(loadScoreFromLocalStorage()),
+  ]);
+  return { state, responses, score };
 }
 
 export async function clearStorage() {
@@ -119,40 +182,10 @@ export async function clearStorage() {
   }
 
   try {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    localStorage.removeItem(LOCAL_SCORE_KEY);
+    sessionStorage.removeItem(LOCAL_STATE_KEY);
+    sessionStorage.removeItem(QUEUE_KEY);
   } catch (error) {
-    console.warn("Impossible de nettoyer le score local", error);
+    console.warn("Impossible de nettoyer la session", error);
   }
-}
-
-const QUEUE_KEY = "adpep-offline-responses";
-
-function getOfflineQueue(): ChallengeResponse[] {
-  try {
-    const raw = sessionStorage.getItem(QUEUE_KEY);
-    return raw ? (JSON.parse(raw) as ChallengeResponse[]) : [];
-  } catch (error) {
-    console.warn("Impossible de récupérer la file offline", error);
-    return [];
-  }
-}
-
-function saveOfflineQueue(queue: ChallengeResponse[]) {
-  try {
-    sessionStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
-  } catch (error) {
-    console.warn("Impossible de sauvegarder la file offline", error);
-  }
-}
-
-export function queueOfflineResponse(response: ChallengeResponse) {
-  const queue = getOfflineQueue();
-  queue.push(response);
-  saveOfflineQueue(queue);
-}
-
-export function flushOfflineQueue(): ChallengeResponse[] {
-  const queue = getOfflineQueue();
-  saveOfflineQueue([]);
-  return queue;
 }

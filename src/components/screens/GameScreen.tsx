@@ -7,7 +7,9 @@ import TeamRotationPanel from "@/components/game/TeamRotationPanel";
 import AnswerFeedback from "@/components/game/AnswerFeedback";
 import OfflineIndicator from "@/components/game/OfflineIndicator";
 import { useGameContext } from "@/context/useGameContext";
+import { calculatePartialScore } from "@/lib/scoring";
 import { useMemo, useState } from "react";
+import StatsPanel from "@/components/game/StatsPanel";
 
 type GameScreenProps = {
   onFinish: () => void;
@@ -27,6 +29,9 @@ export default function GameScreen({ onFinish }: GameScreenProps) {
     visible: false,
     isCorrect: false,
     points: 0,
+    correctMatches: 0,
+    incorrectMatches: 0,
+    total: 0,
   });
 
   const currentChallenge = useMemo(
@@ -52,6 +57,7 @@ export default function GameScreen({ onFinish }: GameScreenProps) {
           isRunning={state.isRunning}
           alerts={state.alerts}
         />
+        <StatsPanel score={gameState.score} />
         <TeamRotationPanel
           currentTeam={currentTeam}
           nextTeam={nextTeam}
@@ -87,32 +93,37 @@ export default function GameScreen({ onFinish }: GameScreenProps) {
                 const selectedOptions = selectedMetier
                   ? [selectedMetier]
                   : selectedCompetences ?? [];
-                const correctAnswers = currentChallenge.correctAnswers;
-                const correctCount = selectedOptions.filter((option) =>
-                  correctAnswers.includes(option)
-                ).length;
-                const isCorrect =
-                  currentChallenge.type === "competences-to-metier"
-                    ? correctCount === correctAnswers.length
-                    : correctCount >= 4;
-                const pointsEarned = isCorrect
-                  ? currentChallenge.points
-                  : Math.round(
-                      currentChallenge.points *
-                        (correctCount / correctAnswers.length)
-                    );
 
-                actions.submitResponse({
+                const breakdown = calculatePartialScore(currentChallenge, {
                   challengeId: currentChallenge.id,
                   teamId: currentTeam.id,
                   selectedOptions,
                   timeSpent: 150000 - state.timeRemaining,
-                  isCorrect,
-                  pointsEarned,
+                  isCorrect: false,
+                  pointsEarned: 0,
                   timestamp: Date.now(),
                 });
 
-                setFeedback({ visible: true, isCorrect, points: pointsEarned });
+                const responsePayload = {
+                  challengeId: currentChallenge.id,
+                  teamId: currentTeam.id,
+                  selectedOptions,
+                  timeSpent: 150000 - state.timeRemaining,
+                  isCorrect: breakdown.isCorrect,
+                  pointsEarned: breakdown.pointsEarned,
+                  timestamp: Date.now(),
+                };
+
+                actions.submitResponse(responsePayload);
+
+                setFeedback({
+                  visible: true,
+                  isCorrect: breakdown.isCorrect,
+                  points: breakdown.pointsEarned,
+                  correctMatches: breakdown.correctMatches,
+                  incorrectMatches: breakdown.incorrectMatches,
+                  total: breakdown.total,
+                });
                 actions.advanceChallenge();
                 actions.nextTeam();
                 start();
@@ -125,15 +136,14 @@ export default function GameScreen({ onFinish }: GameScreenProps) {
           timeRemaining={state.timeRemaining}
           isActive={state.countdownMode === "audio-visual"}
         />
-        <OfflineIndicator />
         <AnswerFeedback
           visible={feedback.visible}
           isCorrect={feedback.isCorrect}
           pointsEarned={feedback.points}
-          onComplete={() =>
-            setFeedback({ visible: false, isCorrect: false, points: 0 })
-          }
+          details={feedback}
+          onComplete={() => setFeedback({ visible: false, isCorrect: false, points: 0, correctMatches: 0, incorrectMatches: 0, total: 0 })}
         />
+        <OfflineIndicator />
       </div>
     </div>
   );
