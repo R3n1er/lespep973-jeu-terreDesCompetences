@@ -1,23 +1,35 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 import { motion, type HTMLMotionProps } from "framer-motion";
 
-const MotionDiv = motion.div;
+const cardVariants = cva("card", {
+  variants: {
+    variant: {
+      default: "",
+      game: "card--game",
+      panel: "glass-panel",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
 
-interface CardProps extends HTMLMotionProps<"div"> {
+interface CardProps extends HTMLMotionProps<"div">, VariantProps<typeof cardVariants> {
   className?: string;
   children?: React.ReactNode;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, children, ...props }, ref) => (
-    <MotionDiv
+  ({ className, children, variant, ...props }, ref) => (
+    <motion.div
       ref={ref}
-      className={cn("card", className)}
+      className={cn(cardVariants({ variant }), className)}
       {...props}
     >
       {children}
-    </MotionDiv>
+    </motion.div>
   )
 );
 Card.displayName = "Card";

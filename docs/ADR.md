@@ -129,6 +129,7 @@ Points d’attention:
 - `AppShell` compose `ArcadeLayout` + `Stage` pour offrir l'AppShell iPad (hud, stage, footer) et s'applique à tous les écrans clés.
 - `ArcadeLayout` importe dynamiquement le design system, applique `.app` au `<body>` et gère le changement de thème (`.theme--{domaine}`) pour propager `--accent`, `--pattern`.
 - Thématisation dynamique : `GameState.currentTheme` conserve le thème courant (persisté offline) et synchronise `AppShell`/`EndScreen` via `GameContext`.
+- Composants atomiques refondus (`Button`, `Card`, `Badge`, `Toast`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel`, `Choices`) utilisent désormais les helpers CSS (`btn--*`, `card__*`, `chip--*`) pour garantir les cibles ≥44px et les états hover/focus arcade.
 - Revue HUD/Choices/GameCard/HUD pour respecter les types stricts (imports type-only, gestion `setInterval`, bornes multi-select).
 - Build validé (`npm run lint`, `npm run type-check`, `npm run build`).
 

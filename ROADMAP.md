@@ -43,18 +43,17 @@ Dernière mise à jour: 2025-09-23
 
 #### J8 — Composants UI atomiques (glass/arcade)
 
-- [ ] Refondre `Button`, `Card`, `Chip`, `Badge`, `Toast`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel` avec look arcade (ombres à étages, bordures épaisses, glow, min 44px).
-  - ✅ `Button`, `Card`, `Chip`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel`
-  - ⏳ `Badge`, `Toast`
-- [ ] Ajouter états : hover/tap (Motion), disabled, focus (outline jaune).
-- [ ] Centraliser variants (ex: `chipVariants`, `glassCardVariants`).
+- [x] Refondre `Button`, `Card`, `Chip`, `Badge`, `Toast`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel` avec look arcade (ombres à étages, bordures épaisses, glow, min 44px).
+  - ✅ `Button`, `Card`, `Chip`, `Badge`, `Toast`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel`
+- [x] Ajouter états : hover/tap (Motion), disabled, focus (outline jaune) sur les composants interactifs (`Button`, `Chip`, `Toast`, indicateur offline).
+- [x] Centraliser variants (ex: `chipVariants`, `glassCardVariants`).
 
 #### J9 — Écrans immersifs
 
-- [ ] **StartScreen** : hero plein écran (logo masqué, CTA arcade, highlights rotation/mode tablette, splash optionnel).
-- [ ] **GameScreen** : plateau board + choices glass, intégration icônes thématiques depuis `/public/icones`, timer barre, scoreboard, overlay countdown.
-- [ ] **EndScreen** : écran célébration (confettis, badge de rang, CTA rejouer/export).
-- [ ] Écran transition/pause (glass overlay) & raffiner `CountdownOverlay`.
+- [x] **StartScreen** : hero plein écran (splash, CTA arcade, highlights rotation/offline).
+- [x] **GameScreen** : plateau glass, HUD avec icône thématique, scoreboard, overlay countdown.
+- [x] **EndScreen** : célébration confettis, badge de rang, résumé scoreboard + CTA rejouer/export.
+- [x] Écran transition/pause (glass overlay) & raffiner `CountdownOverlay`.
 
 #### J10 — Thématisation & finesse
 

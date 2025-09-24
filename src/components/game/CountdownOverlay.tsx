@@ -3,11 +3,13 @@ import { useEffect, useRef } from "react";
 type CountdownOverlayProps = {
   timeRemaining: number;
   isActive: boolean;
+  theme?: string;
 };
 
 export default function CountdownOverlay({
   timeRemaining,
   isActive,
+  theme,
 }: CountdownOverlayProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const finalAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -42,14 +44,14 @@ export default function CountdownOverlay({
   const seconds = Math.max(0, Math.ceil(timeRemaining / 1000));
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-neutral-900/70">
+    <div className="countdown-overlay">
       <audio ref={audioRef} preload="auto">
         <source src="/audio/beep.mp3" type="audio/mpeg" />
       </audio>
       <audio ref={finalAudioRef} preload="auto">
         <source src="/audio/final-beep.mp3" type="audio/mpeg" />
       </audio>
-      <div className="flex h-64 w-64 items-center justify-center rounded-[3rem] border-8 border-neutral-900 bg-red-500 text-7xl font-black text-white shadow-[0_12px_0_rgba(24,24,27,0.8)] animate-[pulse_0.5s_ease-in-out_infinite]">
+      <div className="countdown-overlay__panel" data-theme={theme}>
         {seconds}
       </div>
     </div>

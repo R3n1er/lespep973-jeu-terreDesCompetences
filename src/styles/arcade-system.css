@@ -329,6 +329,98 @@ body.app::before {
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
 }
 
+/* ===== INTERMISSION OVERLAY ===== */
+.intermission-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 11, 26, 0.65);
+  backdrop-filter: blur(18px);
+  z-index: 45;
+}
+
+.intermission-overlay__panel {
+  min-width: 320px;
+  padding: 2.5rem 3rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(135deg, rgba(17, 23, 46, 0.95) 0%, rgba(8, 12, 28, 0.7) 100%);
+  box-shadow: var(--shadow-hud);
+  text-align: center;
+  color: var(--ink);
+}
+
+.intermission-overlay__title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.intermission-overlay__subtitle {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+}
+
+.intermission-overlay__actions {
+  margin-top: 1.5rem;
+}
+
+/* ===== COUNTDOWN OVERLAY ===== */
+.countdown-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 22, 0.75);
+  backdrop-filter: blur(20px);
+  z-index: 50;
+}
+
+.countdown-overlay__panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 240px;
+  border-radius: 64px;
+  border: 6px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(135deg, rgba(229, 62, 62, 0.85) 0%, rgba(125, 95, 255, 0.9) 100%);
+  color: var(--white);
+  font-size: 6rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 35px rgba(255, 255, 255, 0.45);
+  box-shadow: 0 22px 0 rgba(8, 12, 28, 0.75), 0 0 45px rgba(229, 62, 62, 0.5);
+  animation: countdown-pulse 0.6s ease-in-out infinite;
+}
+
+.countdown-overlay__panel[data-theme="handicap"] {
+  background: linear-gradient(135deg, rgba(65, 209, 182, 0.9) 0%, rgba(0, 188, 212, 0.85) 100%);
+  box-shadow: 0 22px 0 rgba(8, 12, 28, 0.75), 0 0 45px rgba(65, 209, 182, 0.55);
+}
+
+.countdown-overlay__panel[data-theme="parentalite"] {
+  background: linear-gradient(135deg, rgba(255, 103, 154, 0.88) 0%, rgba(255, 200, 87, 0.85) 100%);
+  box-shadow: 0 22px 0 rgba(8, 12, 28, 0.75), 0 0 45px rgba(255, 103, 154, 0.55);
+}
+
+@keyframes countdown-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 22px 0 rgba(8, 12, 28, 0.75), 0 0 45px rgba(229, 62, 62, 0.5);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 26px 0 rgba(8, 12, 28, 0.85), 0 0 65px rgba(229, 62, 62, 0.65);
+  }
+}
+
 /* ===== BOUTONS ===== */
 .btn {
   padding: 0.75rem 2rem;
@@ -725,6 +817,47 @@ body.app::before {
   text-shadow: 0 0 12px rgba(255, 200, 87, 0.4);
 }
 
+.offline-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(12px) saturate(1.1);
+  box-shadow: var(--shadow-1);
+  transition: all var(--transition-fast);
+}
+
+.offline-indicator__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.offline-indicator--online {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.18) 0%, rgba(8, 16, 32, 0.5) 100%);
+  color: var(--ink);
+}
+
+.offline-indicator--online .offline-indicator__dot {
+  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+}
+
+.offline-indicator--offline {
+  background: linear-gradient(135deg, rgba(255, 200, 87, 0.2) 0%, rgba(45, 24, 0, 0.6) 100%);
+  color: var(--ink);
+}
+
+.offline-indicator--offline .offline-indicator__dot {
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+}
+
 /* ===== GAME CHALLENGE PANELS ===== */
 .card--game {
   width: 100%;
@@ -825,6 +958,9 @@ body.app::before {
   box-shadow: var(--shadow-intense);
   z-index: 200;
   animation: toast-drop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .toast--success {
@@ -835,6 +971,20 @@ body.app::before {
 .toast--error {
   background: linear-gradient(135deg, #ff5f6d 0%, #e53e3e 100%);
   box-shadow: var(--shadow-intense), 0 0 20px rgba(255, 95, 109, 0.4);
+}
+
+.toast--info {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.9) 0%, rgba(125, 95, 255, 0.95) 100%);
+  box-shadow: var(--shadow-2), 0 0 20px rgba(33, 150, 243, 0.45);
+}
+
+.toast__icon {
+  font-size: 1.25rem;
+}
+
+.toast__message {
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
 }
 
 /* ===== BADGES ===== */
@@ -851,6 +1001,19 @@ body.app::before {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
+}
+
+.badge--accent {
+  background: linear-gradient(135deg, var(--accent) 0%, rgba(255, 103, 154, 0.85) 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-2), var(--accent-glow);
+}
+
+.badge--ghost {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 /* ===== ANIMATIONS CSS PURES ===== */

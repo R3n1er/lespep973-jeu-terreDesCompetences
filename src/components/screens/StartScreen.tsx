@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import AppShell from "@/components/arcade/AppShell";
+import { Badge } from "@/components/ui/badge";
 
 type StartScreenProps = {
   onStart: () => void;
@@ -32,7 +33,7 @@ export default function StartScreen({ onStart, onShowInfo, skipSplash = false }:
           Journée institutionnelle 2025 • <span className="text-accent font-medium">Les PEP Guyane</span>
         </p>
       }
-      boardClassName="relative flex flex-col items-center justify-center gap-10 px-12 py-12 text-center"
+      boardClassName="relative flex flex-col items-center justify-center gap-12 px-12 py-12 text-center"
     >
       <AnimatePresence>
         {showSplash && (
@@ -160,6 +161,31 @@ export default function StartScreen({ onStart, onShowInfo, skipSplash = false }:
               🎮 <span className="font-black">COMMENCER LE JEU</span>
             </span>
           </motion.button>
+
+          {/* Highlights gameplay */}
+          <div className="grid w-full max-w-4xl grid-cols-1 gap-6 text-left lg:grid-cols-3">
+            <div className="glass-panel p-6">
+              <Badge className="mb-3">Rotation</Badge>
+              <h3 className="text-ink text-xl font-bold">13 équipes en relais</h3>
+              <p className="text-ink-soft text-sm leading-relaxed">
+                Chaque binôme dispose de <strong className="text-accent">2 min 30</strong> pour relever un défi avant une intermission animée de 15 secondes.
+              </p>
+            </div>
+            <div className="glass-panel p-6">
+              <Badge variant="accent" className="mb-3">Offline</Badge>
+              <h3 className="text-ink text-xl font-bold">Sauvegarde automatique</h3>
+              <p className="text-ink-soft text-sm leading-relaxed">
+                L'expérience est <strong>100 % PWA</strong> : les scores et défis restent disponibles même sans réseau.
+              </p>
+            </div>
+            <div className="glass-panel p-6">
+              <Badge className="mb-3">Défis</Badge>
+              <h3 className="text-ink text-xl font-bold">Compétences ↔ Métiers</h3>
+              <p className="text-ink-soft text-sm leading-relaxed">
+                Deux formats de jeu, feedback instantané, multiplicateurs de série et bonus de vitesse pour dynamiser la session.
+              </p>
+            </div>
+          </div>
 
           {/* Particules décoratives */}
           <div className="absolute inset-0 pointer-events-none">

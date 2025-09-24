@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { Chip } from '@/components/ui/chip';
 
 interface Choice {
   id: string;
@@ -48,15 +48,11 @@ export default function Choices({
         const isDisabled = Boolean(choice.disabled) || limitReached;
 
         return (
-          <button
+          <Chip
             key={choice.id}
-            className={cn(
-              'chip glow',
-              choice.selected && 'chip--selected',
-              isDisabled && 'chip--disabled'
-            )}
-            onClick={() => handleSelect(choice.id)}
+            selected={choice.selected}
             disabled={isDisabled}
+            onClick={() => handleSelect(choice.id)}
           >
             {choice.icon && (
               <img src={choice.icon} alt="" />
@@ -65,7 +61,7 @@ export default function Choices({
             {choice.selected && (
               <span className="text-accent ml-auto">✓</span>
             )}
-          </button>
+          </Chip>
         );
       })}
 

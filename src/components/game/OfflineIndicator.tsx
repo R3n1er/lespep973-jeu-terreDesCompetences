@@ -1,19 +1,24 @@
 import { useOfflineStatus } from "@/hooks/useOfflineStatus";
+import { cn } from "@/lib/utils";
 
 export default function OfflineIndicator() {
   const { isOnline } = useOfflineStatus();
 
-  if (isOnline) {
-    return (
-      <div className="fixed bottom-4 right-4 rounded-full bg-green-500 text-white px-4 py-2 shadow-lg">
-        En ligne
-      </div>
-    );
-  }
-
   return (
-    <div className="fixed bottom-4 right-4 rounded-full bg-orange-500 text-white px-4 py-2 shadow-lg">
-      Hors ligne - vos données sont conservées localement
+    <div
+      className={cn(
+        "offline-indicator",
+        isOnline ? "offline-indicator--online" : "offline-indicator--offline"
+      )}
+      role="status"
+      aria-live="polite"
+    >
+      <span className="offline-indicator__dot" aria-hidden />
+      <span className="offline-indicator__label">
+        {isOnline
+          ? "En ligne"
+          : "Mode hors-ligne actif — la session est sauvegardée localement"}
+      </span>
     </div>
   );
 }

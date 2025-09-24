@@ -227,6 +227,7 @@ Des équipes de 15 personnes maximum se succèdent sur une tablette pendant **10
 - **Arcade AppShell** : `src/styles/arcade-system.css` gère le layout plein écran (`body.app` fixe, gestion `env(safe-area-*)`), le HUD glassmorphique et les helpers `.glass-panel`, `.btn`, `.chip`.
 - **Thèmes métiers** : classes `.theme--{domaine}` appliquées par `ArcadeLayout` pour injecter `--accent` et motifs SVG spécifiques (`public/icones/*`).
 - **Composants arcade** : `src/components/arcade/` fournit `AppShell`, `ArcadeLayout`, `HUD`, `Stage`, `GameCard`, `Choices`, `Toast` et helpers alignés sur le brief graphique.
+- **UI atomiques** : `src/components/ui/` met à disposition `Button`, `Card`, `Badge` (variants arcade) utilisés dans les écrans métier.
 - **Thématisation dynamique** : `GameState.currentTheme` met à jour automatiquement le thème actif en fonction du défi courant (persisté offline).
 
 ## 📱 Compatibilité

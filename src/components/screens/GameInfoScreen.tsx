@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import AppShell from "@/components/arcade/AppShell";
+import { Badge } from "@/components/ui/badge";
 import GameCard from "@/components/arcade/GameCard";
 
 type GameInfoScreenProps = {
@@ -169,9 +170,9 @@ export default function GameInfoScreen({ onStart, onBack }: GameInfoScreenProps)
 
               {/* Badge système de scoring */}
               <div className="text-center">
-                <div className="badge inline-flex items-center gap-2 text-lg px-6 py-3">
-                  🏆 <span>Système de points avec bonus temps et feedback détaillé</span>
-                </div>
+                <Badge variant="accent" className="text-sm px-6 py-3 uppercase tracking-[0.25em]">
+                  🏆 Système de points avec bonus temps et feedback détaillé
+                </Badge>
               </div>
 
               {/* Domaines métiers avec icônes */}

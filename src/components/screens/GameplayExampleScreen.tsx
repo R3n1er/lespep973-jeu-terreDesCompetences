@@ -4,6 +4,7 @@ import { AppShell } from '@/components/arcade';
 import GameCard from '@/components/arcade/GameCard';
 import Choices from '@/components/arcade/Choices';
 import Toast from '@/components/arcade/Toast';
+import { Badge } from '@/components/ui/badge';
 
 // Exemple de données de jeu
 const EXAMPLE_CHALLENGE = {
@@ -131,9 +132,9 @@ export default function GameplayExampleScreen({ onBack }: GameplayExampleScreenP
           >
             <div className="space-y-4">
               <div className="text-center mb-6">
-                <div className="badge inline-block">
+                <Badge variant="ghost" className="px-4 py-2 tracking-[0.25em]">
                   Défi #{EXAMPLE_CHALLENGE.id} • Thème {EXAMPLE_CHALLENGE.theme}
-                </div>
+                </Badge>
               </div>
 
               <h3 className="text-xl font-bold text-ink mb-4">

@@ -1,61 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { cn } from '@/lib/utils';
+
+type ToastType = 'success' | 'error' | 'info';
 
 interface ToastProps {
-  message: string;
-  type: 'success' | 'error' | 'info';
+  message?: string;
+  type?: ToastType;
   duration?: number;
   onClose: () => void;
 }
 
+const ICONS: Record<ToastType, string> = {
+  success: '✅',
+  error: '❌',
+  info: 'ℹ️',
+};
+
+const DEFAULT_MESSAGES: Record<ToastType, string> = {
+  success: 'Bonne réponse !',
+  error: 'Essaie encore…',
+  info: 'Information',
+};
+
 export default function Toast({
   message,
-  type,
-  duration = 3000,
-  onClose
+  type = 'info',
+  duration = 3200,
+  onClose,
 }: ToastProps) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-      // Délai pour l'animation de sortie
-      setTimeout(onClose, 200);
+      setTimeout(onClose, 220);
     }, duration);
 
     return () => clearTimeout(timer);
   }, [duration, onClose]);
 
+  const resolvedMessage = useMemo(() => message ?? DEFAULT_MESSAGES[type], [message, type]);
+
   if (!visible) return null;
 
-  const toastClasses = [
-    'toast',
-    `toast--${type}`
-  ].join(' ');
-
-  const getIcon = () => {
-    switch (type) {
-      case 'success': return '✅';
-      case 'error': return '❌';
-      case 'info': return 'ℹ️';
-      default: return '';
-    }
-  };
-
-  const getMessage = () => {
-    if (message) return message;
-
-    switch (type) {
-      case 'success': return 'Bonne réponse !';
-      case 'error': return 'Essaie encore…';
-      case 'info': return 'Information';
-      default: return '';
-    }
-  };
-
   return (
-    <div className={toastClasses}>
-      <span className="mr-2">{getIcon()}</span>
-      {getMessage()}
+    <div
+      className={cn('toast', `toast--${type}`)}
+      role="status"
+      aria-live="polite"
+    >
+      <span className="toast__icon" aria-hidden>
+        {ICONS[type]}
+      </span>
+      <span className="toast__message">{resolvedMessage}</span>
     </div>
   );
 }

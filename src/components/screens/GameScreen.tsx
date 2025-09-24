@@ -3,6 +3,7 @@ import { useTeamRotation } from "@/hooks/useTeamRotation";
 import ChallengeRenderer from "@/components/game/ChallengeRenderer";
 import TimerDisplay from "@/components/game/TimerDisplay";
 import CountdownOverlay from "@/components/game/CountdownOverlay";
+import PauseOverlay from "@/components/game/PauseOverlay";
 import TeamRotationPanel from "@/components/game/TeamRotationPanel";
 import AnswerFeedback from "@/components/game/AnswerFeedback";
 import OfflineIndicator from "@/components/game/OfflineIndicator";
@@ -12,6 +13,9 @@ import { useMemo, useState } from "react";
 import StatsPanel from "@/components/game/StatsPanel";
 import { AppShell } from "@/components/arcade";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { THEME_ICONS } from "@/components/arcade/themes";
+import PauseOverlay from "@/components/game/PauseOverlay";
 
 type GameScreenProps = {
   onFinish: () => void;
@@ -71,7 +75,19 @@ export default function GameScreen({ onFinish }: GameScreenProps) {
       <div className="flex flex-col gap-6 xl:flex-row">
         <div className="glass-panel glass-panel--halo flex-1 overflow-hidden p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <h2 className="text-3xl font-black text-ink">Session de jeu</h2>
+            <div className="flex items-center gap-3">
+              <img
+                src={THEME_ICONS[activeTheme]}
+                alt={activeTheme}
+                className="h-10 w-10 opacity-80"
+              />
+              <div className="flex flex-col items-start">
+                <Badge variant="ghost" className="tracking-[0.3em] uppercase">
+                  {currentChallenge?.difficulty ?? "défi"}
+                </Badge>
+                <h2 className="text-3xl font-black text-ink">Session de jeu</h2>
+              </div>
+            </div>
             <div className="flex gap-3">
               <Button
                 variant="accent"
@@ -161,14 +177,29 @@ export default function GameScreen({ onFinish }: GameScreenProps) {
           </div>
         </div>
 
-        <aside className="w-full max-w-xs flex-shrink-0">
+        <aside className="w-full max-w-xs flex-shrink-0 space-y-4">
           <StatsPanel className="h-full" score={gameState.score} />
+          <div className="glass-panel p-4 text-left">
+            <h3 className="text-sm uppercase tracking-[0.3em] text-ink-muted mb-2">Prochain défi</h3>
+            <p className="text-ink font-semibold">
+              {challenges[(gameState.challengeIndex + 1) % challenges.length]?.question ?? "Préparation"}
+            </p>
+            <p className="text-ink-soft text-xs mt-2">
+              Thème : {challenges[(gameState.challengeIndex + 1) % challenges.length]?.theme ?? "à venir"}
+            </p>
+          </div>
         </aside>
       </div>
 
+      <PauseOverlay
+        visible={rotationState.isIntermission}
+        title="Intermission"
+        subtitle="Préparez l'équipe suivante"
+      />
       <CountdownOverlay
         timeRemaining={state.timeRemaining}
         isActive={state.countdownMode === "audio-visual"}
+        theme={activeTheme}
       />
       <AnswerFeedback
         visible={feedback.visible}

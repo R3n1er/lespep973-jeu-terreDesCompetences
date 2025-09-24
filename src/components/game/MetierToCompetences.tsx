@@ -39,7 +39,7 @@ export default function MetierToCompetences({ challenge, onSubmit }: Props) {
 
   return (
     <Card
-      className="card--game"
+      variant="game"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 250, damping: 22 }}
