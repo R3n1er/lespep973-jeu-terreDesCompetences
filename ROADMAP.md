@@ -57,7 +57,7 @@ Dernière mise à jour: 2025-09-23
 
 #### J10 — Thématisation & finesse
 
-- [ ] Mapping automatique thème défi (`theme--handicap` etc.) + pattern background.
+- [x] Mapping automatique thème défi (`theme--handicap` etc.) + pattern background (`resolveThemeForChallenge` + données métiers/équipes enrichies).
 - [ ] Animations finales (pulse carte active, glow chips, transitions Motion, respects `prefers-reduced-motion`).
 - [ ] Tests ergonomie iPad (DevTools 1366×1024) : cibles ≥44px, typos ≥16px.
 

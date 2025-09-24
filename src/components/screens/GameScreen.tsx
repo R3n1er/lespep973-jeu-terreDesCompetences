@@ -15,7 +15,6 @@ import { AppShell } from "@/components/arcade";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { THEME_ICONS } from "@/components/arcade/themes";
-import PauseOverlay from "@/components/game/PauseOverlay";
 
 type GameScreenProps = {
   onFinish: () => void;

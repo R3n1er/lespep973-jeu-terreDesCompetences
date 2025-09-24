@@ -229,6 +229,7 @@ Des équipes de 15 personnes maximum se succèdent sur une tablette pendant **10
 - **Composants arcade** : `src/components/arcade/` fournit `AppShell`, `ArcadeLayout`, `HUD`, `Stage`, `GameCard`, `Choices`, `Toast` et helpers alignés sur le brief graphique.
 - **UI atomiques** : `src/components/ui/` met à disposition `Button`, `Card`, `Badge` (variants arcade) utilisés dans les écrans métier.
 - **Thématisation dynamique** : `GameState.currentTheme` met à jour automatiquement le thème actif en fonction du défi courant (persisté offline).
+- **Helper thème** : `src/lib/theme.ts` résout le thème d’un défi en se basant sur les métiers (`METIERS_ADPEP`) pour appliquer motifs/fond adaptés même lorsque le champ `theme` n’est pas défini.
 
 ## 📱 Compatibilité
 

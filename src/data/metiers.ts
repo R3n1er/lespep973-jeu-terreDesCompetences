@@ -5,6 +5,7 @@ export const METIERS_ADPEP: JobProfile[] = [
     id: "agent-service-interieur",
     nom: "Agent·e de service intérieur",
     secteur: "général",
+    theme: "multiaccueil",
     competences: [
       {
         id: "entretien-locaux",
@@ -42,6 +43,7 @@ export const METIERS_ADPEP: JobProfile[] = [
     id: "educateur-specialise",
     nom: "Éducateur·rice spécialisé·e",
     secteur: "pédagogique",
+    theme: "handicap",
     competences: [
       {
         id: "accompagnement-individualise",
@@ -89,6 +91,7 @@ export const METIERS_ADPEP: JobProfile[] = [
     id: "psychologue",
     nom: "Psychologue",
     secteur: "paramédical",
+    theme: "parentalite",
     competences: [
       {
         id: "evaluation-clinique",

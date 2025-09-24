@@ -29,6 +29,7 @@ export interface JobProfile {
     | "social"
     | "général";
   competences: Competence[];
+  theme?: ThemeType;
 }
 
 export interface ChallengeBase {
@@ -68,6 +69,7 @@ export interface TeamMember {
 export interface Team {
   id: string;
   nom: string;
+  theme?: ThemeType;
   membres: TeamMember[];
 }
 

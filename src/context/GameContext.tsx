@@ -2,6 +2,7 @@ import { useEffect, useMemo, useReducer, useRef } from "react";
 import type { ChallengeResponse, GameState } from "@/types/game";
 import { CHALLENGES_CONFIGURATION } from "@/data/challenges";
 import { TEAMS_SAMPLE } from "@/data/teams";
+import { resolveThemeForChallenge } from "@/lib/theme";
 import {
   loadPersistedGameState,
   loadResponses,
@@ -53,8 +54,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         currentChallenge: CHALLENGES_CONFIGURATION[0],
         challengeIndex: 0,
         currentTeamIndex: 0,
-        currentTheme:
-          CHALLENGES_CONFIGURATION[0]?.theme ?? state.currentTheme ?? "scolarite",
+        currentTheme: resolveThemeForChallenge(
+          CHALLENGES_CONFIGURATION[0],
+          state.currentTheme ?? "scolarite"
+        ),
         score: state.score.teamScores ? state.score : initialScore,
       };
     case "SET_CHALLENGE": {
@@ -63,7 +66,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...state,
         currentChallenge: nextChallenge,
         challengeIndex: action.payload.index,
-        currentTheme: nextChallenge?.theme ?? state.currentTheme,
+        currentTheme: resolveThemeForChallenge(nextChallenge, state.currentTheme),
       };
     }
     case "REGISTER_RESPONSE": {
