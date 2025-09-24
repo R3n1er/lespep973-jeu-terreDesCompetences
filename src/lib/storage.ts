@@ -1,4 +1,4 @@
-import { openDB } from "idb";
+import { openDB, type IDBPDatabase } from "idb";
 import type { ChallengeResponse, GameState, ScoreData } from "@/types/game";
 
 const DB_NAME = "adpep-terres-competences";
@@ -20,7 +20,9 @@ async function getDB() {
           db.createObjectStore(STORE_GAME_STATE, { keyPath: "id" });
         }
         if (!db.objectStoreNames.contains(STORE_RESPONSES)) {
-          const store = db.createObjectStore(STORE_RESPONSES, { keyPath: "key" });
+          const store = db.createObjectStore(STORE_RESPONSES, {
+            keyPath: "key",
+          });
           store.createIndex("byTimestamp", "response.timestamp");
         }
       },
@@ -76,7 +78,9 @@ export async function loadResponses(): Promise<ChallengeResponse[]> {
     const tx = db.transaction(STORE_RESPONSES, "readonly");
     const values = await tx.store.index("byTimestamp").getAll();
     await tx.done;
-    return values.map((entry) => entry.response as ChallengeResponse);
+    return values.map(
+      (entry: { response: ChallengeResponse }) => entry.response
+    );
   } catch (error) {
     console.warn("Impossible de charger les réponses", error);
     return [];

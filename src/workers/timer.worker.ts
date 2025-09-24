@@ -1,18 +1,16 @@
-// Assure les types Worker dans ce contexte
-declare const self: DedicatedWorkerGlobalScope;
-export {};
+/// <reference lib="webworker" />
 
 let last = performance.now();
 let remaining = 150000;
 let running = false;
 
-self.onmessage = (
-  e: MessageEvent<{
+const ctx = self as unknown as DedicatedWorkerGlobalScope;
+
+ctx.onmessage = (e) => {
+  const { type, payload } = e.data as {
     type: "START" | "PAUSE" | "SET";
     payload?: { remaining: number };
-  }>
-) => {
-  const { type, payload } = e.data;
+  };
   if (type === "START") {
     running = true;
     last = performance.now();
@@ -20,10 +18,8 @@ self.onmessage = (
   if (type === "PAUSE") {
     running = false;
   }
-  if (type === "SET") {
-    if (payload && typeof payload.remaining === "number") {
-      remaining = payload.remaining;
-    }
+  if (type === "SET" && payload) {
+    remaining = payload.remaining;
   }
 };
 
@@ -32,9 +28,10 @@ function tick() {
   if (running) {
     const delta = now - last;
     remaining = Math.max(0, remaining - delta);
-    self.postMessage({ type: "TICK", remaining });
+    ctx.postMessage({ type: "TICK", remaining });
   }
   last = now;
   setTimeout(tick, 50);
 }
+
 tick();

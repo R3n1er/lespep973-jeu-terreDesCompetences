@@ -205,11 +205,12 @@ Des équipes de 15 personnes maximum se succèdent sur une tablette pendant **10
 
 ### UI/UX
 
-- **Tailwind CSS v4.0** - Framework CSS utility-first nouvelle génération
+- **Tailwind CSS v4.0** - Framework CSS utility-first nouvelle génération, alimenté par les tokens ADPEP définis dans `src/styles/theme.css`
 - **Shadcn/ui** - Composants React avec CLI 3.0
 - **Lucide Icons (lucide-react)** - Icônes SVG modernes, accessibles
 - **Motion 12.23.18** - Animations fluides (ex-Framer Motion)
 - **Radix UI** - Primitives accessibles
+- **Design system arcade** - Styles glassmorphiques centralisés dans `src/styles/arcade-system.css`, helpers `.glass-panel`, `.btn`, `.chip`, animations countdown/confetti
 
 ### État et données
 
@@ -218,6 +219,15 @@ Des équipes de 15 personnes maximum se succèdent sur une tablette pendant **10
 - **LocalStorage** - Persistance locale RGPD-compliant
 - **LocalStorage + IndexedDB** : Persistance hors-ligne et reprise de session
 - **Offline queue** : File de réponses en mode hors-ligne
+
+## 🎨 Design system arcade
+
+- **Tokens ADPEP** : couleurs, surfaces, ombres, rayons et transitions définis dans `src/styles/theme.css` et exposés à Tailwind (`tailwind.config.ts`).
+- **Typographies** : Exo 2 (texte et chiffres) et TeX Gyre Adventor (titres) chargées via `src/styles/typography.css`, accessibles sur les classes utilitaires `.font-display` / `.font-numeric`.
+- **Arcade AppShell** : `src/styles/arcade-system.css` gère le layout plein écran (`body.app` fixe, gestion `env(safe-area-*)`), le HUD glassmorphique et les helpers `.glass-panel`, `.btn`, `.chip`.
+- **Thèmes métiers** : classes `.theme--{domaine}` appliquées par `ArcadeLayout` pour injecter `--accent` et motifs SVG spécifiques (`public/icones/*`).
+- **Composants arcade** : `src/components/arcade/` fournit `AppShell`, `ArcadeLayout`, `HUD`, `Stage`, `GameCard`, `Choices`, `Toast` et helpers alignés sur le brief graphique.
+- **Thématisation dynamique** : `GameState.currentTheme` met à jour automatiquement le thème actif en fonction du défi courant (persisté offline).
 
 ## 📱 Compatibilité
 
@@ -278,13 +288,14 @@ terres-competences/
 ├── public/                 # Assets statiques
 ├── src/
 │   ├── components/        # Composants React
+│   │   ├── arcade/       # AppShell arcade, HUD, GameCard, helpers glassmorphiques
 │   │   ├── game/         # Composants spécifiques au jeu
-│   │   ├── ui/           # Composants UI génériques
+│   │   ├── ui/           # Composants UI génériques (shadcn/ui)
 │   │   └── screens/      # Écrans de l'application
 │   ├── data/             # Données des métiers et compétences
 │   ├── hooks/            # Hooks personnalisés
 │   ├── lib/              # Utilitaires et helpers
-│   ├── styles/           # Styles globaux
+│   ├── styles/           # Styles globaux (theme, typography, arcade system)
 │   └── types/            # Définitions TypeScript
 ├── tests/                # Tests unitaires et d'intégration
 └── docs/                 # Documentation complémentaire
@@ -376,5 +387,6 @@ _Que le meilleur esprit d'équipe gagne !_ 🏆
 
 ## 📊 État d’avancement (synthèse)
 
-- **En place**: scripts port 3000 strict, Vitest + RTL (smoke), ESLint, type-check, manifest paysage, SW placeholder, types et données v1, worker + hook timer v1.
-- **À venir**: UI écrans (Start/Game/End), ChallengeRenderer + défis, rotation équipes, Workbox + offline complet, tests d’intégration et E2E iPad.
+- **En place** : Design tokens ADPEP (`theme.css`), design system arcade (`arcade-system.css`), typographies Exo 2/TeX Gyre Adventor, ArcadeLayout + thèmes dynamiques, composants HUD/Choices/GameCard, worker timer v1, rotation équipes, persistance IndexedDB/localStorage, Workbox + PWA injectManifest, scripts qualité (lint/type/test/build).
+- **En cours** : AppShell global (J7), refonte complète des composants atomiques côté jeu (J8) et harmonisation Start/Game/End selon brief.
+- **À planifier** : Tests Playwright iPad, QA accessibilité/performances iPad, documentation finale (ADR/Implementation/README) continue, refinements animations et thèmes dynamiques (J9-J10).

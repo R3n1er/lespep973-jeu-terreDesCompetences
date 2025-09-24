@@ -17,27 +17,32 @@ export default function CompetencesToMetier({
   const [selected, setSelected] = useState<string>("");
 
   return (
-    <Card className="w-full bg-neutral-0" as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 250, damping: 22 }}>
+    <Card
+      className="card--game"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 250, damping: 22 }}
+    >
       <CardHeader>
-        <CardTitle className="text-3xl font-extrabold text-neutral-900">
-          Associez les compétences au métier
-        </CardTitle>
+        <CardTitle>Associez les compétences au métier</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <ul className="grid gap-2 rounded-2xl border-4 border-neutral-900 bg-neutral-50 p-4 text-left text-neutral-800">
+        <ul className="competence-list">
           {competences.map((c) => (
-            <li key={c} className="text-base font-medium">
-              • {c}
+            <li key={c} className="competence-list__item">
+              <span className="competence-bullet">•</span>
+              <span>{c}</span>
             </li>
           ))}
         </ul>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="selection-grid">
           {options.map((o) => (
-            <motion.div key={o} whileHover={{ scale: 1.03 }}>
+            <motion.div key={o} whileHover={{ scale: selected === o ? 1 : 1.03 }}>
               <Button
-                variant={selected === o ? "accent" : "outline"}
-                className="h-14 w-full text-base"
+                variant={selected === o ? "secondary" : "outline"}
+                size="lg"
+                className="selection-grid__button"
                 onClick={() => setSelected(o)}
               >
                 {o}
@@ -46,9 +51,12 @@ export default function CompetencesToMetier({
           ))}
         </div>
 
-        <motion.div className="pt-4" whileHover={{ scale: selected ? 1.02 : 1 }}>
+        <motion.div
+          className="selection-actions"
+          whileHover={{ scale: selected ? 1.02 : 1 }}
+        >
           <Button
-            size="lg"
+            size="xl"
             disabled={!selected}
             onClick={() => selected && onSubmit(selected)}
           >

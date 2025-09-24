@@ -14,6 +14,7 @@ export const CHALLENGES_CONFIGURATION: Challenge[] = [
     options: ["agent-service-interieur", "educateur-specialise", "psychologue"],
     correctAnswers: ["agent-service-interieur"],
     points: 100,
+    theme: "multiaccueil",
   },
   {
     id: "challenge-2",
@@ -42,5 +43,6 @@ export const CHALLENGES_CONFIGURATION: Challenge[] = [
       "evaluation-progression",
     ],
     points: 120,
+    theme: "handicap",
   },
 ];

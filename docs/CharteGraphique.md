@@ -18,22 +18,40 @@ Objectif : règles de cohérence visuelle pour l’application PWA iPad, compat
   - Barre supérieure : ≥ 32px
   - Écran d’accueil : 96–128px
 
-## 2) Couleurs (tokens à valider)
+## 2) Couleurs (références officielles RVB)
 
-- Marque
-  - `--brand-primary` : #0A6CC2 (à valider)
-  - `--brand-secondary` : #24A148 (à valider)
-  - `--brand-accent` : #FF7A00 (à valider)
-- Neutres
-  - `--neutral-0` : #FFFFFF
-  - `--neutral-50` : #F7F7F7
-  - `--neutral-100` : #EDEDED
-  - `--neutral-700` : #3F3F46
-  - `--neutral-900` : #18181B
-- États
-  - `--success` : #16A34A
-  - `--warning` : #F59E0B
-  - `--danger` : #DC2626
+Mode RVB principal (logo et institutionnel) — conversion hex incluse :
+
+- Bleu foncé (ENGAGEMENT) — RVB 0/73/148 → `#004994`
+- Bleu institutionnel (INSTITUTIONNEL) — RVB 0/159/227 → `#009FE3`
+- Rouge (LOISIRS/CULTURE/ÉDUCATION) — RVB 227/6/19 → `#E30613`
+- Vert (SOCIAL MÉDICO SOCIAL) — RVB 0/150/64 → `#009640`
+
+Autres teintes thématiques (RVB → hex) :
+
+- Institutionnel Orange — 236/102/8 → `#EC6608`
+- Petite enfance — 157/56/109 → `#9D386D`
+- Travail/Social — 139/87/159 → `#8B579F`
+- Formation — 249/177/20 → `#F9B114`
+
+Couleurs complémentaires :
+
+- Jaune d’or — 255/204/0 → `#FFCC00`
+- Bleu nuit — 0/93/131 → `#005D83`
+- Rubis — 229/0/91 → `#E5005B`
+- Gris — 137/143/154 → `#89939A`
+- Turquoise — 87/191/199 → `#57BFC7`
+- Vert anis — 190/208/0 → `#BED000`
+
+Tokens CSS proposés (usage Tailwind v4) :
+
+- `--brand-primary` = `#004994` (bleu foncé engagement)
+- `--brand-secondary` = `#009FE3` (bleu institutionnel)
+- `--brand-accent` = `#009640` (vert social médico-social)
+- `--brand-orange` = `#EC6608`
+- `--brand-gold` = `#FFCC00`
+- Neutres : `#FFFFFF`, `#F7F7F7`, `#EDEDED`, `#3F3F46`, `#18181B`
+- États : success `#16A34A`, warning `#F59E0B`, danger `#DC2626`
 
 ### Mapping Tailwind v4
 
@@ -45,9 +63,9 @@ Déclarer des variables CSS et les référencer dans Tailwind.
 
 @layer theme {
   :root {
-    --brand-primary: #0a6cc2;
-    --brand-secondary: #24a148;
-    --brand-accent: #ff7a00;
+    --brand-primary: #004994;
+    --brand-secondary: #009FE3;
+    --brand-accent: #009640;
 
     --neutral-0: #fff;
     --neutral-50: #f7f7f7;
@@ -103,13 +121,21 @@ export default {
 
 ## 3) Typographies
 
-- Police système iOS : `-apple-system`, `SF Pro Text` (performance/lecture).
-- Alternative (si autorisée) : `Inter`.
-- Hiérarchie :
-  - H1/H2 : 28–36px, 700
-  - H3/H4 : 20–24px, 600
-  - Corps : 16–18px, 400–500
-  - Légendes : 12–14px
+Références marque (édition imprimée) :
+
+- Familiale principale : Klavika (Regular/Medium/Bold)
+- Accompagnement : ITC Avant Garde Gothic Std (Extra Light/Demi/Bold)
+
+Alternatives gratuites pour le numérique (recommandées) :
+
+- Remplacement Klavika → Exo 2 (Regular/Medium/Bold)
+- Remplacement Avant Garde → TeX Gyre Adventor (Regular/Italic/Bold)
+
+Recommandations d’usage UI (web/iPad) :
+
+- Par défaut: pile système `-apple-system, SF Pro Text, Inter, Segoe UI, Roboto…`
+- Option branding renforcé: Exo 2 (titres) + Adventor (accents) si licence/poids ok
+- Hiérarchie conseillée: H1/H2 28–36px 700; H3/H4 20–24px 600; Corps 16–18px 400–500; Légendes 12–14px
 
 ```css
 /* src/styles/typography.css */

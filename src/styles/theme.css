@@ -2,31 +2,192 @@
 
 @layer theme {
   :root {
-    --brand-primary: #0a6cc2;
-    --brand-secondary: #24a148;
-    --brand-accent: #ff7a00;
+    /* ===== Palette ADPEP & arcade ===== */
+    --pep-blue: #2196f3;
+    --pep-navy: #2d3848;
+    --pep-red: #e53e3e;
+    --pep-green: #13c58c;
+    --pep-yellow: #ffc857;
+    --pep-violet: #7d5fff;
+    --pep-pink: #ff679a;
+    --pep-cyan: #00bcd4;
+    --pep-lime: #8bc34a;
 
+    /* ===== Typo / contraste ===== */
+    --ink: #e9eef8;
+    --ink-soft: #c7d1f3;
+    --ink-muted: #8a95b2;
     --neutral-0: #ffffff;
     --neutral-50: #f7f7f7;
     --neutral-100: #ededed;
     --neutral-700: #3f3f46;
     --neutral-900: #18181b;
-
     --success: #16a34a;
     --warning: #f59e0b;
     --danger: #dc2626;
+
+    /* ===== Surfaces & verre ===== */
+    --surface-0: #050b1a;
+    --surface-1: #0b1020;
+    --surface-2: #11172e;
+    --surface-3: #161d35;
+    --card-1: #11172e;
+    --card-2: #0f1430;
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-hover: rgba(255, 255, 255, 0.1);
+    --white: #ffffff;
+
+    /* ===== Gradients & halos ===== */
+    --bg: radial-gradient(1600px 900px at 60% 15%, #1b2550 0%, #050b1a 60%);
+    --bg-overlay: radial-gradient(ellipse at center, rgba(33, 150, 243, 0.2) 0%, transparent 55%);
+    --glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
+
+    /* ===== Ombres ===== */
+    --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.25);
+    --shadow-2: 0 18px 48px rgba(0, 0, 0, 0.35);
+    --shadow-glow: 0 0 20px rgba(33, 150, 243, 0.3);
+    --shadow-intense: 0 25px 80px rgba(0, 0, 0, 0.45);
+    --shadow-hud: 0 20px 60px rgba(5, 11, 26, 0.8);
+
+    /* ===== Rayons ===== */
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+    --radius-full: 64px;
+
+    /* ===== Tokens app iPad ===== */
+    --stage-max-w: 1600px;
+    --stage-max-h: 1000px;
+    --hud-height: 84px;
+    --card-width: 420px;
+    --choices-width: 380px;
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+    --safe-area-left: env(safe-area-inset-left);
+    --safe-area-right: env(safe-area-inset-right);
+
+    /* ===== Accent dynamique ===== */
+    --accent: var(--pep-blue);
+    --accent-soft: rgba(33, 150, 243, 0.2);
+    --accent-glow: 0 0 24px rgba(33, 150, 243, 0.55);
+    --pattern: none;
+
+    /* ===== Mapping design ⇄ Tailwind ===== */
+    --background: var(--surface-1);
+    --foreground: var(--ink);
+    --card: rgba(17, 23, 46, 0.78);
+    --card-foreground: var(--ink);
+    --popover: rgba(17, 23, 46, 0.92);
+    --popover-foreground: var(--ink);
+    --primary: var(--accent);
+    --primary-foreground: #071020;
+    --secondary: rgba(255, 255, 255, 0.12);
+    --secondary-foreground: var(--ink);
+    --muted: rgba(255, 255, 255, 0.08);
+    --muted-foreground: var(--ink-soft);
+    --accent-foreground: var(--ink);
+    --destructive: var(--pep-red);
+    --border: var(--glass-border);
+    --input: rgba(255, 255, 255, 0.16);
+    --ring: rgba(33, 150, 243, 0.6);
+    --chart-1: var(--pep-blue);
+    --chart-2: var(--pep-green);
+    --chart-3: var(--pep-yellow);
+    --chart-4: var(--pep-violet);
+    --chart-5: var(--pep-pink);
+    --sidebar: rgba(11, 16, 32, 0.9);
+    --sidebar-foreground: var(--ink);
+    --sidebar-primary: var(--accent);
+    --sidebar-primary-foreground: #08101e;
+    --sidebar-accent: rgba(255, 255, 255, 0.14);
+    --sidebar-accent-foreground: var(--ink);
+    --sidebar-border: var(--glass-border);
+    --sidebar-ring: rgba(33, 150, 243, 0.4);
+
+    /* ===== Transitions ===== */
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-flip: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .theme--handicap {
+    --accent: #41d1b6;
+    --accent-soft: rgba(65, 209, 182, 0.2);
+    --accent-glow: 0 0 24px rgba(65, 209, 182, 0.55);
+    --pattern: url("/icones/icone_handicap.svg");
+  }
+
+  .theme--parentalite {
+    --accent: #ff679a;
+    --accent-soft: rgba(255, 103, 154, 0.2);
+    --accent-glow: 0 0 24px rgba(255, 103, 154, 0.55);
+    --pattern: url("/icones/icone-aide-parentalite.svg");
+  }
+
+  .theme--scolarite {
+    --accent: #2196f3;
+    --accent-soft: rgba(33, 150, 243, 0.2);
+    --accent-glow: 0 0 24px rgba(33, 150, 243, 0.55);
+    --pattern: url("/icones/icone-scolarite.svg");
+  }
+
+  .theme--prevention {
+    --accent: #ffc857;
+    --accent-soft: rgba(255, 200, 87, 0.2);
+    --accent-glow: 0 0 24px rgba(255, 200, 87, 0.5);
+    --pattern: url("/icones/icone_prevention.svg");
+  }
+
+  .theme--protection {
+    --accent: #e53e3e;
+    --accent-soft: rgba(229, 62, 62, 0.2);
+    --accent-glow: 0 0 24px rgba(229, 62, 62, 0.55);
+    --pattern: url("/icones/icone-protection-enfance.svg");
+  }
+
+  .theme--insertion {
+    --accent: #13c58c;
+    --accent-soft: rgba(19, 197, 140, 0.2);
+    --accent-glow: 0 0 24px rgba(19, 197, 140, 0.55);
+    --pattern: url("/icones/icone-insertion-professionnel.svg");
+  }
+
+  .theme--mobilite {
+    --accent: #7d5fff;
+    --accent-soft: rgba(125, 95, 255, 0.2);
+    --accent-glow: 0 0 24px rgba(125, 95, 255, 0.55);
+    --pattern: url("/icones/icone-mobilite.svg");
+  }
+
+  .theme--multiaccueil {
+    --accent: #8bc34a;
+    --accent-soft: rgba(139, 195, 74, 0.2);
+    --accent-glow: 0 0 24px rgba(139, 195, 74, 0.55);
+    --pattern: url("/icones/icone-multi-accueil-enfants.svg");
+  }
+
+  .theme--multimedia {
+    --accent: #00bcd4;
+    --accent-soft: rgba(0, 188, 212, 0.2);
+    --accent-glow: 0 0 24px rgba(0, 188, 212, 0.55);
+    --pattern: url("/icones/icone-centre-multimedia.svg");
   }
 }
 
 @layer base {
   html {
-    color: var(--neutral-900);
-    background: linear-gradient(135deg, #0a6cc21a 0%, #24a1481a 50%, #ff7a001a 100%);
+    color: var(--foreground);
+    background-color: var(--surface-0);
+    background-image: var(--bg);
   }
 
   body {
     min-height: 100vh;
-    background-image: radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.1) 1px, transparent 0);
-    background-size: 16px 16px;
+    background: var(--bg);
+    color: var(--foreground);
+    margin: 0;
   }
 }

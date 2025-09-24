@@ -4,62 +4,77 @@ Dernière mise à jour: 2025-09-23
 
 ### Rôle de ce document
 
-- Source de vérité pour le suivi d’évolution et d’avancement (planning, jalons, tâches).
-- À utiliser par l’équipe et les assistants IA pour reporter l’état (Done/In progress/Blocked).
-- Mises à jour conseillées: à chaque étape majeure livrée ou blocage identifié.
-- Convention: cocher les cases quand terminé, indiquer [Blocked] avec cause et action.
+- Source de vérité pour le suivi d’évolution (jalons, tâches, statut).
+- À mettre à jour à chaque livraison majeure ou nouveau blocage.
+- Convention: cases à cocher ✔ quand terminé, 🟡 en cours, 🟥 bloqué.
 
 ### Liens utiles
 
 - README: `./README.md`
-- PRD (Spécifications): `./docs/PRD.md`
-- ADR (Décisions d’architecture): `./docs/ADR.md`
+- PRD: `./docs/PRD.md`
+- ADR: `./docs/ADR.md`
 - Plan d’implémentation: `./docs/Implementation.md`
-- Règles du jeu: `./docs/ReglesDuJeu.md`
+- Charte graphique: `./docs/CharteGraphique.md`
+- Brief UI: `./docs/Brief_Graphisme.md`
 
-### Jalons et suivi (Semaine J1 → J7)
+### Synthèse état actuel
 
-#### J1–J2 — Fondations et offline minimal
+- Fondations techniques (React/Vite/TS/PWA/tests) ✔
+- Gameplay fonctionnel (timer, rotation, défis, persistance) ✔
+- UI actuelle = base shadcn mais non conforme au brief arcade glassmorphique 🟡
+- Tests unitaires OK, Playwright à mettre en place 🟡
 
-- [ ] Initialiser Vite React + TypeScript, ESLint/Prettier, Husky, Vitest, Playwright _(Vite + React + TypeScript prêts ; outils qualité/tests à installer)_
-- [x] Configurer Tailwind v4 (tokens, styles globaux)
-- [ ] Ajouter PWA minimale: manifest (paysage), SW Workbox (shell pré-caché)
-- [ ] Types de base dans `src/types/*`
-- [ ] Données métiers v1 dans `src/data/metiers.ts`
+### Jalons 2025 – Refondre l’expérience iPad (Glassmorphisme « Poulolo UI Arcade »)
 
-#### J3–J4 — Timer + Rotation + Écrans de base
+#### J6 — Mise à jour thème global & tokens (plein écran iPad) _(en cours)_
 
-- [ ] `timer.worker.ts` (performance.now, tick ~20Hz, reprise)
-- [ ] Hook `useGameTimer` (start/pause/set, alertes 30s/10s/5s, phase intermission)
-- [ ] `StartScreen` (règles + commencer), `EndScreen` (récap + nouvelle session)
-- [ ] `useTeamRotation` (2min30 + pause 15s) et intégration UI + compte à rebours audio-visuel 5s
+- [x] Étendre `src/styles/theme.css` avec les tokens ADPEP (palette, gradients, shadows, glass, fonts Exo2/Adventor).
+- [x] Mettre à jour `tailwind.config` (+ `postcss.config` si besoin) pour exposer les variables (`brand`, `accent`, `glass`...).
+- [x] Charger les polices (import CSS ou assets), définir la pile typographique globale.
+- [x] Créer helpers CSS (`.app`, `.glass-panel`, `.chip`, animations countdown/pulse/confetti) selon le brief.
+- [x] Vérifier lint/type/build.
 
-#### J5 — Gameplay v1 et persistance
+#### J7 — AppShell & layout sans scroll (iPad paysage)
 
-- [ ] `ChallengeRenderer` + défis (Compétences→Métier, Métier→Compétences)
-- [ ] Transitions/feedback (Motion) et compteur sélection
-- [ ] Boutons de validation manuelle (passage anticipé) + fallback auto à expiration
-- [ ] `GameDataManager` (IndexedDB + localStorage) et export JSON
+- [x] Introduire `AppShell` (fond halo + topbar HUD + footer) englobant Start/Game/End.
+- [x] Gérer `safe-area`/`viewport-fit=cover`, `h-screen w-screen` sans scroll; breakpoints paysage.
+- [x] Implémenter topbar HUD (logo, titre, timer global, score) en glassmorphisme.
+- [x] Ajuster `App.tsx` pour intégrer `AppShell` + synchronisation theme dynamique (`GameState.currentTheme`).
 
-#### J6 — UI tablette, a11y et finitions
+#### J8 — Composants UI atomiques (glass/arcade)
 
-- [ ] Safe areas iPad, cibles 44×44, marges 24–32px
-- [ ] Thèmes d’alertes (30s/10s), feedback sonore/vibration (si supportée)
-- [ ] Optimisations performance (lazy, memo), bundle Vite
+- [ ] Refondre `Button`, `Card`, `Chip`, `Badge`, `Toast`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel` avec look arcade (ombres à étages, bordures épaisses, glow, min 44px).
+  - ✅ `Button`, `Card`, `Chip`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel`
+  - ⏳ `Badge`, `Toast`
+- [ ] Ajouter états : hover/tap (Motion), disabled, focus (outline jaune).
+- [ ] Centraliser variants (ex: `chipVariants`, `glassCardVariants`).
 
-#### J7 — Tests et préparation déploiement
+#### J9 — Écrans immersifs
 
-- [ ] Tests unitaires (timer, rotation, scoring, mapping données)
-- [ ] Tests d’intégration (flux de jeu complet)
-- [ ] E2E Playwright iPad paysage (PWA offline)
-- [ ] Vérifs déploiement (Vercel, CSP), documentation finale
+- [ ] **StartScreen** : hero plein écran (logo masqué, CTA arcade, highlights rotation/mode tablette, splash optionnel).
+- [ ] **GameScreen** : plateau board + choices glass, intégration icônes thématiques depuis `/public/icones`, timer barre, scoreboard, overlay countdown.
+- [ ] **EndScreen** : écran célébration (confettis, badge de rang, CTA rejouer/export).
+- [ ] Écran transition/pause (glass overlay) & raffiner `CountdownOverlay`.
 
-### Tâches ouvertes / Backlog
+#### J10 — Thématisation & finesse
 
-- [ ] Générer dataset `src/data/challenges.ts` à partir des métiers/compétences
-- [ ] Mesure d’accessibilité (a11y) et correctifs ciblés
-- [ ] Mode export/print des résultats (PDF optionnel)
+- [ ] Mapping automatique thème défi (`theme--handicap` etc.) + pattern background.
+- [ ] Animations finales (pulse carte active, glow chips, transitions Motion, respects `prefers-reduced-motion`).
+- [ ] Tests ergonomie iPad (DevTools 1366×1024) : cibles ≥44px, typos ≥16px.
 
-### Historique (résumé)
+#### J11 — QA & Documentation finale
 
-- 2025-09-23: Création initiale de la roadmap (jalons J1→J7)
+- [ ] Mettre à jour `docs/Implementation.md`, `docs/ADR.md`, `README.md` avec la refonte UI.
+- [ ] Vérifications : `npm run lint`, `npm run type-check`, `npm run test`, `npm run build`.
+- [ ] Configurer tests Playwright (viewport iPad, scénarios Start→Game→End, offline) et exécuter.
+- [ ] Revue PWA (manifest, icons, caching) + capture pour communication.
+
+### Backlog / Risques
+
+- Chargement polices personnalisées (licences Exo2/Adventor) → fallback system si indisponible.
+- Performances visuelles (glass + blur) sur iPad → surveiller via DevTools, prévoir mode réduit.
+- Gestion thèmes multiples → vérifier cohérence caches SW et rechargements.
+
+### Historique
+
+- 2025-09-23 : Ajout jalons J6 → J11 pour refonte UI glassmorphisme.

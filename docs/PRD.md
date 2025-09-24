@@ -846,3 +846,5 @@ describe("Game Flow Integration", () => {
   ]
 }
 ```
+
+- **Logo institutionnel** : `public/images/Logo_lespep973_png.png` affiché à l'ouverture (écran splash fade-in/out) et en bas de chaque écran.

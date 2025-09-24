@@ -9,8 +9,13 @@ import {
 
 declare const self: ServiceWorkerGlobalScope;
 
-self.skipWaiting();
-clientsClaim();
+self.addEventListener("install", () => {
+  (self as unknown as ServiceWorkerGlobalScope).skipWaiting();
+});
+
+self.addEventListener("activate", () => {
+  clientsClaim();
+});
 
 precacheAndRoute(self.__WB_MANIFEST || []);
 

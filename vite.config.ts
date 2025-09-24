@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import { configDefaults } from "vitest/config";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig({
+export default defineConfig(() => ({
   plugins: [
     react(),
     VitePWA({
@@ -14,6 +14,9 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts",
       manifest: false,
+      devOptions: {
+        enabled: false,
+      },
     }),
   ],
   server: {
@@ -43,4 +46,4 @@ export default defineConfig({
       ],
     },
   },
-});
+}));

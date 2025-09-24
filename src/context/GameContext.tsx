@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-} from "react";
+import { useEffect, useMemo, useReducer, useRef } from "react";
 import type { ChallengeResponse, GameState } from "@/types/game";
 import { CHALLENGES_CONFIGURATION } from "@/data/challenges";
 import { TEAMS_SAMPLE } from "@/data/teams";
@@ -19,21 +14,25 @@ import {
   loadSessionSnapshot,
 } from "@/lib/storage";
 import { applyScore, calculatePartialScore } from "@/lib/scoring";
-import { GameContext, GameContextValue } from "@/context/gameContextShared";
+import type { GameContextValue } from "@/context/gameContextShared";
+import { GameContext } from "@/context/gameContextShared";
 import { useOfflinePersistence } from "@/context/useOfflinePersistence";
+
+const initialScore = {
+  teamScores: {},
+  globalScore: 0,
+  correctAnswers: 0,
+  totalChallenges: 0,
+  streak: 0,
+};
 
 const initialState: GameState = {
   phase: "setup",
   currentTeamIndex: 0,
   currentChallenge: null,
   challengeIndex: 0,
-  score: {
-    teamScores: {},
-    globalScore: 0,
-    correctAnswers: 0,
-    totalChallenges: 0,
-    streak: 0,
-  },
+  currentTheme: "scolarite",
+  score: initialScore,
   responses: [],
 };
 
@@ -54,20 +53,29 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         currentChallenge: CHALLENGES_CONFIGURATION[0],
         challengeIndex: 0,
         currentTeamIndex: 0,
+        currentTheme:
+          CHALLENGES_CONFIGURATION[0]?.theme ?? state.currentTheme ?? "scolarite",
         score: state.score.teamScores ? state.score : initialScore,
       };
-    case "SET_CHALLENGE":
+    case "SET_CHALLENGE": {
+      const nextChallenge = CHALLENGES_CONFIGURATION[action.payload.index] ?? null;
       return {
         ...state,
-        currentChallenge:
-          CHALLENGES_CONFIGURATION[action.payload.index] ?? null,
+        currentChallenge: nextChallenge,
         challengeIndex: action.payload.index,
+        currentTheme: nextChallenge?.theme ?? state.currentTheme,
       };
+    }
     case "REGISTER_RESPONSE": {
-      const challenge = CHALLENGES_CONFIGURATION.find((c) => c.id === action.payload.challengeId);
+      const challenge = CHALLENGES_CONFIGURATION.find(
+        (c) => c.id === action.payload.challengeId
+      );
       const breakdown = challenge
         ? calculatePartialScore(challenge, action.payload)
-        : { pointsEarned: action.payload.pointsEarned, isCorrect: action.payload.isCorrect };
+        : {
+            pointsEarned: action.payload.pointsEarned,
+            isCorrect: action.payload.isCorrect,
+          };
       const enrichedResponse: ChallengeResponse = {
         ...action.payload,
         pointsEarned: breakdown.pointsEarned,
@@ -78,6 +86,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         responses: [...state.responses, enrichedResponse],
         score: applyScore(state.score, enrichedResponse),
         currentChallenge: null,
+        currentTheme: state.currentTheme,
       };
     }
     case "NEXT_TEAM":
@@ -89,6 +98,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         phase: "finished",
+        currentTheme: state.currentTheme,
       };
     case "HYDRATE":
       return {
@@ -97,6 +107,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         phase: action.payload.phase ?? state.phase,
         score: action.payload.score ?? state.score,
         responses: action.payload.responses ?? state.responses,
+        currentTheme: action.payload.currentTheme ?? state.currentTheme,
       };
     default:
       return state;
@@ -136,6 +147,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       phase: state.phase,
       challengeIndex: state.challengeIndex,
       currentTeamIndex: state.currentTeamIndex,
+      currentTheme: state.currentTheme,
     });
   }, [state]);
 
@@ -161,7 +173,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       },
       nextTeam: () => dispatch({ type: "NEXT_TEAM" }),
       advanceChallenge: () => {
-        const nextIndex = (state.challengeIndex + 1) % CHALLENGES_CONFIGURATION.length;
+        const nextIndex =
+          (state.challengeIndex + 1) % CHALLENGES_CONFIGURATION.length;
         dispatch({ type: "SET_CHALLENGE", payload: { index: nextIndex } });
       },
       resetGame: async () => {

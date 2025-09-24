@@ -1,5 +1,16 @@
 export type ChallengeType = "competences-to-metier" | "metier-to-competences";
 
+export type ThemeType =
+  | "handicap"
+  | "parentalite"
+  | "scolarite"
+  | "prevention"
+  | "protection"
+  | "insertion"
+  | "mobilite"
+  | "multiaccueil"
+  | "multimedia";
+
 export interface Competence {
   id: string;
   libelle: string;
@@ -28,6 +39,7 @@ export interface ChallengeBase {
   correctAnswers: string[];
   points: number;
   timeLimit?: number;
+  theme?: ThemeType;
 }
 
 export interface ChallengeCompetencesToMetier extends ChallengeBase {
@@ -72,6 +84,7 @@ export interface GameState {
   currentTeamIndex: number;
   currentChallenge: Challenge | null;
   challengeIndex: number;
+  currentTheme: ThemeType;
   score: ScoreData;
   responses: ChallengeResponse[];
 }

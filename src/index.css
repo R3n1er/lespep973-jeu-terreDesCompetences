@@ -56,38 +56,7 @@ body {
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: var(--neutral-0);
-  --foreground: var(--neutral-900);
-  --card: var(--neutral-0);
-  --card-foreground: var(--neutral-900);
-  --popover: var(--neutral-0);
-  --popover-foreground: var(--neutral-900);
-  --primary: var(--brand-primary);
-  --primary-foreground: var(--neutral-0);
-  --secondary: var(--brand-secondary);
-  --secondary-foreground: var(--neutral-0);
-  --muted: var(--neutral-50);
-  --muted-foreground: var(--neutral-700);
-  --accent: var(--brand-accent);
-  --accent-foreground: var(--neutral-0);
-  --destructive: var(--danger);
-  --border: var(--neutral-100);
-  --input: var(--neutral-100);
-  --ring: var(--brand-secondary);
-  --chart-1: #0a6cc2;
-  --chart-2: #24a148;
-  --chart-3: #ff7a00;
-  --chart-4: #3f3f46;
-  --chart-5: #16a34a;
-  --sidebar: var(--neutral-0);
-  --sidebar-foreground: var(--neutral-900);
-  --sidebar-primary: var(--brand-primary);
-  --sidebar-primary-foreground: var(--neutral-0);
-  --sidebar-accent: var(--brand-accent);
-  --sidebar-accent-foreground: var(--neutral-0);
-  --sidebar-border: var(--neutral-100);
-  --sidebar-ring: var(--brand-secondary);
+  --radius: var(--radius-lg);
 }
 
 .dark {

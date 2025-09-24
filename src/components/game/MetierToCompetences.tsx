@@ -14,7 +14,10 @@ type Props = {
 
 export default function MetierToCompetences({ challenge, onSubmit }: Props) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const jobLabel = useMemo(() => getJobLabel(challenge.metier), [challenge.metier]);
+  const jobLabel = useMemo(
+    () => getJobLabel(challenge.metier),
+    [challenge.metier]
+  );
 
   function toggle(option: string) {
     setSelected((prev) => {
@@ -36,29 +39,33 @@ export default function MetierToCompetences({ challenge, onSubmit }: Props) {
 
   return (
     <Card
-      className="w-full bg-neutral-0"
+      className="card--game"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 250, damping: 22 }}
     >
       <CardHeader>
-        <CardTitle className="text-3xl font-extrabold text-neutral-900">
+        <CardTitle>
           Sélectionnez 6 compétences pour {jobLabel}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <p className="text-neutral-600 mb-2">
+        <p className="selection-counter">
           Sélection en cours: {selected.size}/{MAX_SELECTION}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="selection-grid">
           {challenge.options.map((option) => {
             const isSelected = selected.has(option);
             const isDisabled = !isSelected && selected.size >= MAX_SELECTION;
             return (
-              <motion.div key={option} whileHover={{ scale: isDisabled ? 1 : 1.03 }}>
+              <motion.div
+                key={option}
+                whileHover={{ scale: isDisabled ? 1 : 1.03 }}
+              >
                 <Button
                   variant={isSelected ? "secondary" : "outline"}
-                  className="h-14 w-full text-left text-base"
+                  size="lg"
+                  className="selection-grid__button"
                   onClick={() => toggle(option)}
                   disabled={isDisabled}
                 >
@@ -70,11 +77,11 @@ export default function MetierToCompetences({ challenge, onSubmit }: Props) {
         </div>
 
         {selected.size > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2 text-sm text-neutral-700">
+          <div className="selection-badges">
             {Array.from(selected).map((option) => (
               <span
                 key={option}
-                className="rounded-full bg-brand-primary/10 px-3 py-1 text-brand-primary"
+                className="selection-badge"
               >
                 {getCompetenceLabel(option)}
               </span>
@@ -82,11 +89,19 @@ export default function MetierToCompetences({ challenge, onSubmit }: Props) {
           </div>
         )}
 
-        <div className="flex flex-wrap gap-4 pt-4">
-          <Button size="lg" disabled={selected.size !== MAX_SELECTION} onClick={handleSubmit}>
+        <div className="selection-actions">
+          <Button
+            size="xl"
+            disabled={selected.size !== MAX_SELECTION}
+            onClick={handleSubmit}
+          >
             Valider
           </Button>
-          <Button variant="outline" size="lg" onClick={() => setSelected(new Set())}>
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => setSelected(new Set())}
+          >
             Réinitialiser
           </Button>
         </div>

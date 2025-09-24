@@ -23,7 +23,8 @@ Références:
 
 - React 19.1 + TypeScript 5.6 + Vite 7 (Node 20.19+/22.12+).
 - UI: Tailwind CSS v4, shadcn/ui et Radix UI; animations via Motion 12.
-- Justification: performance (Vite + Rolldown), DX moderne, accessibilité (Radix), cohérence visuelle rapide (Tailwind/shadcn), API React 19.
+- Design system arcade « Poulolo UI » : tokens centralisés dans `src/styles/theme.css`, règles détaillées dans `src/styles/arcade-system.css`, typographies Exo 2 + TeX Gyre Adventor chargées via `src/styles/typography.css`.
+- Justification: performance (Vite + Rolldown), DX moderne, accessibilité (Radix), cohérence visuelle rapide (Tailwind/shadcn), API React 19, différenciation graphique par un thème glassmorphique responsive.
 
 ### 2) Mode hors-ligne (Offline-first)
 
@@ -66,7 +67,8 @@ interface GameTimer {
 
 ### 5) Cible iPad paysage et contraintes d’écran
 
-- Orientation paysage (PWA manifest), gestion des safe areas (`viewport-fit=cover`, `env(safe-area-inset-*)`).
+- Orientation paysage (PWA manifest), gestion des safe areas (`viewport-fit=cover`, `env(safe-area-inset-*)`) gérée par `ArcadeLayout` qui injecte les classes `.app` / `.theme--xxx` sur `<body>`.
+- Layout sans scroll: `body.app` fixe, padding dynamique sur les safe areas, `stage` centrée au sein d'un AppShell glassmorphique.
 - Résolutions de référence: 1366×1024 (iPad Air) et 1640×1200 (iPad Pro).
 - Cibles tactiles min 44×44 px; marges internes 24–32 px; éviter les bords (home indicator, multitasking).
 
@@ -114,3 +116,76 @@ Points d’attention:
 - Créer IndexedDB (schéma sessions/résultats) + export JSON.
 - Implémenter contrôles de validation manuelle des défis (UI + logique) avec fallback auto sur expiration du timer.
 - Couvrir par tests Vitest/Testing Library et Playwright (viewport iPad paysage).
+
+---
+
+## Mises à jour (2025-09-24)
+
+### Thème global & AppShell iPad
+
+- Tokens graphiques consolidés dans `src/styles/theme.css` (couleurs ADPEP, surfaces, ombres, transitions, dimensions plateau) et exposés à Tailwind v4 (`tailwind.config.ts`).
+- Fonts Exo 2 (corps/ui) et TeX Gyre Adventor (titres) chargées côté CSS, accessibles via `--font-sans`, `--font-display`, `--font-numeric`.
+- `arcade-system.css` pilote le layout sans scroll (`body.app` fixe, safe areas `env()`) et fournit les helpers glassmorphiques (`.glass-panel`, `.btn`, `.chip`, animations countdown/confetti).
+- `AppShell` compose `ArcadeLayout` + `Stage` pour offrir l'AppShell iPad (hud, stage, footer) et s'applique à tous les écrans clés.
+- `ArcadeLayout` importe dynamiquement le design system, applique `.app` au `<body>` et gère le changement de thème (`.theme--{domaine}`) pour propager `--accent`, `--pattern`.
+- Thématisation dynamique : `GameState.currentTheme` conserve le thème courant (persisté offline) et synchronise `AppShell`/`EndScreen` via `GameContext`.
+- Revue HUD/Choices/GameCard/HUD pour respecter les types stricts (imports type-only, gestion `setInterval`, bornes multi-select).
+- Build validé (`npm run lint`, `npm run type-check`, `npm run build`).
+
+## Mises à jour (2025-09-23)
+
+### UI/UX arcade et charte ADPEP
+
+- Style arcade (bordures épaisses, ombres « borne », halos colorés, gradients dynamiques) défini dans `src/styles/arcade-system.css` et piloté par les variables de `src/styles/theme.css`.
+- shadcn/ui + Tailwind v4 pour la cohérence visuelle; Motion pour transitions/feedback; composants UI consomment les nouveaux tokens (`brand`, `accent`, `glass`, `ink`).
+- `ArcadeLayout` applique dynamiquement la classe `.app` et le thème métier (`.theme--handicap`, etc.) sur `<body>` pour propager les variables CSS.
+- Composants refactorisés: `Button`, `Card`, `Chip`, `Toast`, `TimerDisplay`, `StatsPanel`, `TeamRotationPanel`, écrans `StartScreen`/`GameScreen`/`EndScreen` et overlay timer.
+- Cibles tactiles iPad ≥ 44×44 px: tokens `--radius-*`, helpers `.glass-panel`, `.btn`, `.chip`; options de défis en `min-height: 56px`.
+
+### Logo institutionnel
+
+- Actif: `public/images/logo_lespep973.jpg` (format optimisé pour le HUD arcade).
+- Splash au lancement (fade-in/out), réutilisation en en-tête/pied au sein du topbar glassmorphique.
+- Performance: image mise en cache via stratégie Workbox (CacheFirst images).
+
+### PWA / Service Worker
+
+- Workbox: `precacheAndRoute`, routes `NetworkFirst` (documents), `StaleWhileRevalidate` (scripts/styles), `CacheFirst` (images).
+- VitePWA: stratégie `injectManifest`, worker `src/sw.ts`.
+- Décision: désactiver l’enregistrement du SW en développement (`devOptions.enabled=false`) pour éviter les incohérences HMR/hydratation (écran blanc). Consigne de debug: « Unregister » le SW et hard-reload si comportement anormal.
+
+### Persistance offline
+
+- IndexedDB: stores `game-state` (keyPath `id`), `responses` (keyPath `key`, index `byTimestamp`), `offline-queue` (autoIncrement `id`).
+- localStorage: clé `adpep-score` (score courant global + par équipe).
+- `GameDataManager`: export/import JSON; `clearStorage()` avant import; file offline vidée à la reconnexion.
+
+### Scoring et feedback
+
+- `calculatePartialScore`:
+  - Compétences→métier: réponse exacte = points pleins; sinon 0.
+  - Métier→compétences: succès partiel dès 4/6 corrects (points réduits), 6/6 = points pleins; bonus temps ≤ 30%.
+- `applyScore`: mise à jour par équipe et globale; multiplicateur de série (×1,1 dès 3, ×1,2 dès 5).
+- `AnswerFeedback`: feedback visuel détaillé (correct/incorrect/total + points).
+
+### Contexte et architecture UI
+
+- `GameContext` refactorisé (extraction `gameContextShared`, hook `useGameContext`) pour éviter les soucis de fast-refresh et isoler le contexte.
+- Actions: `advanceChallenge` ajouté; `submitResponse` enrichi avec breakdown.
+- Hydratation depuis IndexedDB/localStorage au montage.
+
+### Timer et compte à rebours
+
+- Worker `timer.worker.ts` à ~50ms tick avec `performance.now()`; hook `useGameTimer` (start/pause/set, alertes 30/10/5s).
+- `TimerDisplay`: transitions de couleurs et pulsation sur les 5 dernières secondes.
+- `CountdownOverlay`: décompte visuel 5→0 + vibration si supportée (audio optionnel, soumis aux permissions navigateur).
+
+### Tests & qualité
+
+- Vitest + Testing Library: unitaires (timer, rotation, scoring, composants) et intégration (flux start→game).
+- Playwright E2E (à mettre en place): viewport iPad 1366×1024, scénarios PWA offline et vérification d’hydratation CSS.
+- ESLint + TypeScript strict; scripts `pre-commit` (lint + type-check + tests).
+
+### Port et dev server
+
+- Vite `server` et `preview` forcés sur port 3000 (`strictPort: true`) pour homogénéité des environnements.

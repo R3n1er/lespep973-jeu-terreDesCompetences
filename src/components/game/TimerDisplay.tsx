@@ -9,9 +9,10 @@ type TimerDisplayProps = {
     tenSeconds: boolean;
     fiveSeconds: boolean;
   };
+  className?: string;
 };
 
-export default function TimerDisplay({ timeRemaining, isRunning, alerts }: TimerDisplayProps) {
+export default function TimerDisplay({ timeRemaining, isRunning, alerts, className }: TimerDisplayProps) {
   const totalSeconds = Math.max(0, Math.ceil(timeRemaining / 1000));
   const minutes = Math.floor(totalSeconds / 60)
     .toString()
@@ -24,28 +25,21 @@ export default function TimerDisplay({ timeRemaining, isRunning, alerts }: Timer
     }
   }, [alerts.fiveSeconds]);
 
-  let visualState = "border-emerald-500 text-emerald-600 bg-emerald-50";
+  let stateClass = "timer-display--safe";
   if (alerts.fiveSeconds) {
-    visualState = "border-red-600 bg-red-500 text-white animate-[pulse_0.5s_ease-in-out_infinite]";
+    stateClass = "timer-display--critical";
   } else if (alerts.tenSeconds) {
-    visualState = "border-orange-500 bg-orange-500/90 text-white animate-[pulse_1s_ease-in-out_infinite]";
+    stateClass = "timer-display--warning";
   } else if (alerts.thirtySeconds) {
-    visualState = "border-amber-500 bg-amber-100 text-amber-700";
+    stateClass = "timer-display--caution";
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div
-        className={cn(
-          "rounded-[2.5rem] border-4 px-12 py-5 text-4xl font-black tracking-wider shadow-[0_10px_0_rgba(15,23,42,0.75)]",
-          "transition-transform duration-150",
-          visualState
-        )}
-        aria-live="polite"
-      >
+    <div className={cn("timer-display", stateClass, !isRunning && "timer-display--paused", className)}>
+      <div className="timer-display__value" aria-live="polite">
         {minutes}:{seconds}
       </div>
-      <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">
+      <p className="timer-display__label">
         {isRunning ? "Temps restant" : "En pause"}
       </p>
     </div>
